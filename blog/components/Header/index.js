@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Menu, Icon, Drawer, Tooltip, Popover, Spin } from 'antd'
 import { connect } from 'react-redux'
-import { changeThemeType } from '../../redux/action';
+import { changeThemeType,changeFixed,changeVisible } from '../../redux/action';
 import './index.less'
 import Link from 'next/link';
 import api from '../../utils/request';
 import Router from 'next/router';
 import IconFont from '../IconFont'
-import moment from 'moment'
 import Author from '../Author';
 import Sentence from '../sentence';
 import { loadScript } from '../../utils'
+import WeatherContent from '../WeatherContent';
 const Header = (props) => {
   const [visible, setVisible] = useState(false);
   const [listType, setlistType] = useState([])
@@ -24,11 +24,19 @@ const Header = (props) => {
   useEffect(async () => {
     const { data: res } = await api.getActicleType()
     setlistType(res.data)
+    return () => {
+      setVisible(false)
+      setlistType([])
+    }
   }, [])
   //跳转到列表页
   const handleClick = (e) => {
     if (e.key == 0) {
       Router.push('/index')
+      return
+    }
+    if(e.key == 4) {
+      Router.push('/gusekbook')
       return
     }
     Router.push(`/list?id=${e.key}`)
@@ -38,19 +46,24 @@ const Header = (props) => {
       return !menuFlag
     })
     setVisible(true)
+    props.changeVisible(true)
   }
   const hideVisible = () => {
     setVisible(false)
+    props.changeVisible(false)
   }
 
   const getIpWeatherInfo = () => {
     //获取天气接口
     api.getIpWeather().then(async res => {
-
-      if (res.status !== 200 || !res.data.data[0]) return
+      if (res.data.status != 200) return
       setIpWeather(res.data.data[0])
       const adlng = res.data.data[0].adlng
       const adlat = res.data.data[0].adlat
+      localStorage.setItem('city',JSON.stringify({
+        province:res.data.data[0].province,
+        city:res.data.data[0].city
+      }))
       setIpLong({ adlng, adlat })
       const weatherInfo = await api.getWeather(adlng, adlat)
       // console.log('getWeather',weatherInfo);
@@ -75,10 +88,20 @@ const Header = (props) => {
       
     }
   }
+  //检测是否滚动
+  const scrollMove = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    if (scrollTop) {
+      props.changeFixed(true)
+    }else {
+      props.changeFixed(false)
+    }
+  }
   // 支持暗黑主题 + 获取ip信息 + 天气信息
   useEffect(() => {
     getIpWeatherInfo()
     changeTheme()
+    window.addEventListener('scroll', scrollMove)
   }, [])
   //主题变化而更新
   useEffect(() => {
@@ -122,132 +145,11 @@ const Header = (props) => {
     let arr = [{ icon: 'icon-huaban' }, { icon: 'icon-huaban' }, { icon: 'icon-sun' }, { icon: 'icon-moon' }]
     return arr[theme].icon
   }
-  // 天气组件
-  const WeatherContent = (
-    <div id="weather-content">
-      {
-        weatherInfo && weatherInfo.now && ipWeather.city &&
-        <>
-          <div className="weather-content-info1">
-            <div className="weather-content-left">
-              <div className="temp">
-                {weatherInfo.now.temp}
-                <span style={{ fontSize: 16, fontWeight: 300, color: '#999' }}>℃</span>
-              </div>
-              <div className="address">
-                {
-                  weatherInfo.daily[0] && 
-                  <div className="temp-text">
-                    <span style={{ marginLeft: '5px' }}>{weatherInfo.daily[0].tempMin}</span>
-                    <span style={{ fontSize: 12, fontWeight: 300, color: '#999', marginTop: 2 }}>℃</span>
-                    <span style={{ margin: '0 5px' }}>-</span>
-                    {weatherInfo.daily[0].tempMax}
-                    <span style={{ fontSize: 12, fontWeight: 300, color: '#999', marginTop: 2 }}>℃</span>
-                  </div>
-                }
 
-              </div>
-              <p className="trend">{weatherInfo.summary}</p>
-            </div>
-
-            <div className="weather-content-right">
-              <img src={`http://cdn.blogleeee.com/custom${weatherInfo.now.icon}.png`} />
-            </div>
-          </div>
-
-          {
-            weatherInfo.warning[0] &&
-            <div className="warning-box">
-              <WarningOutlined style={{ marginRight: 10, color: '#ff4d4f', fontSize: 18 }} />
-              <div className="warning">{weatherInfo.warning[0].text}</div>
-            </div>
-          }
-          <div className="info2">
-            <div className="option">
-              <div className="item">
-                <p className="tit">日出日落</p>
-                <p className="con">
-                  {moment(weatherInfo.sunmoon.sunrise).format('HH:mm')} -
-                {moment(weatherInfo.sunmoon.sunset).format('HH:mm')}
-                </p>
-              </div>
-              <div className="item">
-                <p className="tit">湿度</p>
-                <p className="con">{weatherInfo.now.humidity}%</p>
-              </div>
-            </div>
-            <div className="option">
-              <div className="item">
-                <p className="tit">风速</p>
-                <p className="con">{weatherInfo.now.windDir} {weatherInfo.now.windScale}级</p>
-              </div>
-              <div className="item">
-                <p className="tit">气压</p>
-                <p className="con">{weatherInfo.now.pressure}hpa</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 天气实况图 */}
-          {
-            ipLong &&
-            <iframe
-              width="400"
-              height="150"
-              src={`https://embed.windy.com/embed2.html?lat=${ipLong.adlat}&lon=${ipLong.adlng}&detailLat=34.069&detailLon=-118.323&width=380&height=200&zoom=10&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`}
-              frameBorder="0"
-            >
-            </iframe>
-          }
-
-
-          <div className="info3">
-            <div className="future">
-              <div className="title">未来7小时</div>
-              <ul className="list">
-                {
-                  weatherInfo.hourly.slice(0, 7).map((item, index) => (
-                    <li className="item" key={index}>
-                      <img src={`http://cdn.blogleeee.com/${item.icon}.png`} />
-                      <div className="temp">{item.temp}</div>
-                      <div className="time">{moment(item.fxTime).format('HH')}时</div>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-
-            <div className="future">
-              <div className="title">未来7天</div>
-              <ul className="list">
-                {
-                  weatherInfo.daily.map((item, index) => (
-                    <li className="item" key={index}>
-                      <img src={`http://cdn.blogleeee.com/${item.iconDay}.png`} />
-                      <div className="temp">{item.tempMax}</div>
-                      <div className="time">{moment(item.fxDate).format('dddd')}</div>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </div>
-
-          <p style={{ fontSize: 12, textAlign: 'center', color: '#999', margin: '20px 0 10px' }}>
-            天气实况推送
-          {/* 数据更新： {moment(weatherInfo.updateTime).startOf('min').fromNow()}  */}
-          </p>
-        </>
-      }
-      {
-        (!weatherInfo || !weatherInfo.now) && <Spin tip="祈祷中..." />
-      }
-    </div>
-  )
   return (
     <>
     {/* {xs< 576px sm≥ 576px md≥ 768px lg≥ 992px xl ≥ 1200px xxl≥ 1600px } */}
-      <div className="header">
+      <div className={["header",props.defaultState.isFixed ? 'header-fixed' : ''].join(' ')}>
         <Row type="flex" justify="center">
           <Col xs={18} sm={8} md={6} lg={4} xl={6}>
             <span className="header-logo">
@@ -261,7 +163,9 @@ const Header = (props) => {
             {
               ipWeather &&
               <span className="header-weather">
-                <Popover placement="bottom" content={WeatherContent} trigger="hover">
+                <Popover placement="bottom" 
+                content={<WeatherContent weatherInfo={weatherInfo} ipWeather={ipWeather} ipLong={ipLong}/>} 
+                trigger="hover">
                   <div className='weather-title-box'>
                     {
                       weatherInfo && weatherInfo.now &&
@@ -293,7 +197,7 @@ const Header = (props) => {
               </Tooltip>
             </span>
           </Col>
-          <Col xs={0} sm={0} md={8} lg={10} xl={8}>
+          <Col xs={0} sm={0} md={10} lg={12} xl={10}>
             <Menu mode="horizontal" onClick={handleClick}>
               <Menu.Item key="0">
                 <Icon type="home" />首页
@@ -325,10 +229,12 @@ const Header = (props) => {
           closable={true}
           onClose={hideVisible}
           visible={visible}
+          width={'80%'}
         >
           <div>
             <Author></Author>
             <Sentence></Sentence>
+            <WeatherContent weatherInfo={weatherInfo} ipWeather={ipWeather} ipLong={ipLong}/>
           </div>
         </Drawer>
       </div>
@@ -341,5 +247,5 @@ export default connect(
   state => ({
     defaultState: state,
   }),
-  { changeThemeType }
+  { changeThemeType,changeFixed,changeVisible }
 )(Header)

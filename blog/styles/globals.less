@@ -163,14 +163,15 @@ a {
             padding-left: .3rem;
           }
           span{
-            font-size: .15rem;
+            font-size: .8rem;
             margin: 0;
+            padding-left: .3rem;
           }
         }
       }
     }
   }
-  @media screen and(min-width: 435px) and (max-width: 593px) {
+  @media screen and(min-width: 454px) and (max-width: 593px) {
     .listItem{
       margin-top: 1.5rem;
       .flex;
@@ -211,7 +212,7 @@ a {
           .flex;
           margin-top: 2rem;
           flex-direction: row;
-          font-size: .6rem;
+          font-size: 1.05rem;
           >div:nth-child(1){
             position: relative;
           }
@@ -232,7 +233,7 @@ a {
     }
   }
 
-  @media screen and (min-width: 370px) and (max-width: 434px) {
+  @media screen and (min-width: 370px) and (max-width: 453px) {
     .listItem{
       margin-top: 1.5rem;
       .flex;
@@ -262,7 +263,7 @@ a {
         flex-direction: column;
         padding-left: 1.3rem;
         &-title{
-          font-size: 1rem;
+          font-size: 1.1rem;
           font-weight: bold;
           margin-bottom: .2rem;
         }
@@ -272,7 +273,7 @@ a {
         &-footer{
           .flex;
           margin-top: 1.7rem;
-          font-size: .6rem;
+          font-size: 1rem;
           flex-direction: row;
           >div:nth-child(1){
             position: relative;
@@ -287,7 +288,7 @@ a {
             margin-left: 1.2rem;
           }
           span{
-            font-size: .3rem;
+            font-size: .8rem;
             margin: 0 .1rem;
           }
         }
@@ -334,7 +335,7 @@ a {
           >span{
             background-color: #f5f7fa;
             border-radius: 5px;
-            font-size: .8rem;
+            font-size: 1rem;
             padding: .3rem;
           }
         }
@@ -346,7 +347,7 @@ a {
           .flex;
           margin-top: .5rem;
           flex-direction: row;
-          font-size: .7rem;
+          font-size: 1rem;
           >div:nth-child(1){
             position: relative;
           }
@@ -401,6 +402,12 @@ a {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+.next-right {
+  position: relative;
+  right: 80%;
+  top: 0;
+  transition: all 3s linear 0s;
 }
 .comm-main{
   margin-top: .5rem; 
@@ -503,4 +510,92 @@ code {
   z-index: 999;
   opacity: 1;
   border-radius: .3rem;
+}
+
+/* 过度动画 */
+.cssnice{
+  animation: cssnice 1s 1;
+}
+@keyframes cssnice{
+  0%{
+    opacity: 0;
+    transform: scale3d(0.3,0.3,0.3);
+  }
+  50%{
+    opacity: 1;
+  }
+}
+/* 过度动画 */
+.cssnice1{
+  animation: cssnice1 1s both;
+}
+@keyframes cssnice1{
+  0%{
+    opacity: 0;
+    transform: translate3d(-100%,0,0);
+  }
+  50%{
+    opacity: 1;
+    transform: translate3d(3%,0,0);
+  }
+  65%{
+    opacity: 1;
+    transform: translate3d(-2.5%,0,0);
+  }
+  80%{
+    opacity: 1;
+    transform: translate3d(0,0,0);
+  }
+  90%{
+    opacity: 1;
+    transform: translate3d(-1%,0,0);
+  }
+  100%{
+    opacity: 1;
+    transform: translate3d(0,0,0);
+  }
+}
+/* 过度动画 */
+.cssnice2{
+  animation: cssnice2 1s both;
+}
+@keyframes cssnice2{
+  0%{
+    opacity: 0;
+    transform: translate3d(100%,0,0);
+  }
+  100%{
+    opacity: 1;
+    transform: translate3d(0,0,0);
+  }
+}
+/* 过度动画 */
+.cssniceright{
+  animation: cssniceright 1.2s both;
+}
+@keyframes cssniceright{
+  0%{
+    opacity: 0;
+    transform: translate3d(100%,0,0);
+  }
+  50%{
+    opacity: 1;
+    transform: translate3d(-3%,0,0);
+  }
+  65%{
+    opacity: 1;
+    transform: translate3d(2.5%,0,0);
+  }
+  80%{
+    opacity: 1;
+    transform: translate3d(-2%,0,0);
+  }
+  90%{
+    opacity: 1;
+    transform: translate3d(-1%,0,0);
+  }
+  100%{
+    opacity: 1;
+    transform: translate3d(0,0,0);
+  }
 }

@@ -7,12 +7,15 @@ import Author from '../components/Author'
 import Sentence from '../components/sentence';
 import Footer from '../components/Footer'
 import api from '../utils/request';
+import {timefilter} from '../utils';
 import { Row, Col, List, Icon,Tag } from 'antd'
 import marked from 'marked'
 import hljs from "highlight.js";
 import 'highlight.js/styles/monokai-sublime.css';
 import Iazyimg from '../components/lazyImg';
-const Home = (list) => {
+import {connect} from 'react-redux';
+
+const Home = ({list,defaultState}) => {
 
   //markdown 解析配置
   const renderer = new marked.Renderer();
@@ -34,10 +37,8 @@ const Home = (list) => {
 
   const mylist= list.data
   const [headTitle, setHeadTitle] = useState('首页 | 吴朝温 | 前端学习笔记 | 吴绍温个人博客')
-  // const [loading, setLoading] = useState(false)
 
   Router.events.on('routeChangeStart',(...args)=>{
-    // console.log('1.routeChangeStart->路由开始变化,参数为:',args)
     if(args[0] == "/index") return
   })
   const checkTitle = () =>{
@@ -55,9 +56,9 @@ const Home = (list) => {
       // 在组件卸载前执行
       // 在此做一些收尾工作, 比如清除定时器/取消订阅等
     }
-  }, []) 
+  },[]) 
   return (
-    <div className="next-box">
+    <div className={["next-box",defaultState.visible ? 'next-right' : ''].join(' ')}>
       <Head>
         <title>{headTitle}</title>
         <link rel="icon" href="../static/favicon.ico" type="image/x-icon" />
@@ -73,7 +74,7 @@ const Home = (list) => {
             itemLayout="vertical"
             dataSource={mylist}   // 数据源
             renderItem={item => (
-              <List.Item className="listItem">
+              <List.Item className="listItem cssnice">
                 <div className="listItem-img">
                   <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
                 </div>
@@ -100,7 +101,7 @@ const Home = (list) => {
             )}
           />
         </Col>
-        <Col className="comm-right" xs={0} sm={0} md={7} lg={5} xl={4}>
+        <Col className="comm-right cssniceright" xs={0} sm={0} md={7} lg={5} xl={4}>
           <Author />
           <Sentence/>
         </Col>
@@ -109,22 +110,19 @@ const Home = (list) => {
     </div>
   )
 }
-function timefilter(value) {
-  let time = new Date(value)
-  let year = time.getFullYear()
-  let month = (time.getMonth() + 1 + '').padStart(2, '0')
-  let date = (time.getDate() + '').padStart(2, '0')
 
-  return `${year}-${month}-${date}`
-}
 Home.getInitialProps = async () => {
   const { data: res } = await api.getArticleList()
   res.data.forEach(item => {
-    item.addTime = timefilter(item.addTime)
+    item.addTime = timefilter(item.addTime,'ymd')
   });
-  return res
+  return {list:res}
 }
 
 
-
-export default Home
+export default connect(
+  state => ({
+    defaultState: state,
+  }),
+  {}
+)(Home)

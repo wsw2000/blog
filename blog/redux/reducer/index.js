@@ -1,6 +1,10 @@
+import flix from "highlight.js/lib/languages/flix";
 
 let defaultState = {
-  themeType:0
+  themeType : 0,
+	isFixed : false,
+	visible : false
+	
 }
 
 export default function countReducer(preState=defaultState,action){
@@ -10,6 +14,10 @@ export default function countReducer(preState=defaultState,action){
 	switch (type) {
 		case 'changeThemeType': 
 			return {...preState,themeType:data}
+		case 'changeFixed': 
+			return {...preState,isFixed:data}
+		case 'changeVisible': 
+			return {...preState,visible:data}
 		default:
 			return preState
 	}

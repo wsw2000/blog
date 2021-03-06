@@ -4,23 +4,39 @@ import Link from 'next/link'
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Footer from '../components/Footer'
+import Sentence from '../components/sentence';
+import {timefilter} from '../utils';
 import api from '../utils/request';
 import Iazyimg from '../components/lazyImg';
 import { Row, Col, List, Icon, Breadcrumb,Tag } from 'antd'
-
-const myList = (result) => {
+import {connect} from 'react-redux';
+const myList = ({result,defaultState}) => {
   const [types, setTypes] = useState(['技术','生活'])
   const [list, setList] = useState(result.res.data)
   useEffect(()=>{
     setList(result.res.data)
   })   
-  //传入一个参数，代表着componentDidMount componentDidUpadte
-  // [],相当于componentDidMount   [list]  list改变才监测 
-
+  const [headTitle, setHeadTitle] = useState('博客列表 | 吴绍温个人博客 | 前端学习笔记')
+  const checkTitle = () =>{
+    document.addEventListener('visibilitychange',function(){
+      var isHidden = document.hidden;
+      isHidden && setHeadTitle('呜呜呜~~你离开了我')
+      !isHidden && setHeadTitle('博客列表 | 吴绍温个人博客 | 前端学习笔记')
+    })
+  }
+  useEffect(() => { 
+    checkTitle()
+    // 在此可以执行任何带副作用操作
+    return () => { 
+      checkTitle()
+      // 在组件卸载前执行
+      // 在此做一些收尾工作, 比如清除定时器/取消订阅等
+    }
+  },[]) 
   return (
-    <div className="next-box">
-      <Head>
-        <title>wsw</title>
+    <div className={["next-box",defaultState.visible ? 'next-right' : ''].join(' ')}>
+       <Head>
+        <title>{headTitle}</title>
       </Head>
       <Header />
       <Row className="comm-main" type="flex" justify="center">
@@ -70,26 +86,25 @@ const myList = (result) => {
         </Col>
         <Col className="comm-right" xs={0} sm={0} md={7} lg={5} xl={4}>
           <Author />
+          <Sentence/>
         </Col>
       </Row>
         <Footer></Footer>
     </div>
   )
 }
-function timefilter(value) {
-  let time = new Date(value)
-  let year = time.getFullYear()
-  let month = (time.getMonth() + 1 + '').padStart(2, '0')
-  let date = (time.getDate() + '').padStart(2, '0')
 
-  return `${year}-${month}-${date}`
-}
 myList.getInitialProps = async(context) =>{
   const {data:res} = await api.getListByType(context.query.id)
   res.data.forEach(item => {
-    item.addTime = timefilter(item.addTime)
+    item.addTime = timefilter(item.addTime,'ymd')
   });
   const result = { res,type:context.query.id }
-  return result
+  return {result}
 }
-export default myList
+export default connect(
+  state => ({
+    defaultState: state,
+  }),
+  {}
+)(myList)

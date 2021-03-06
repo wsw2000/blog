@@ -56,7 +56,21 @@ export const loadScript = (url, callback) => {
   }
 }
 
+export const timefilter = (value,type) =>{
+  let time = new Date(value)
+  let year = time.getFullYear()
+  let month = (time.getMonth() + 1 + '').padStart(2, '0')
+  let date = (time.getDate() + '').padStart(2, '0')
 
+  let hours = (time.getHours() + '').padStart(2, '0')
+  let min = (time.getMinutes() + '').padStart(2, '0')
+  let sec = (time.getSeconds() + '').padStart(2, '0')
+
+  if(type == 'ymd'){
+    return `${year}-${month}-${date} `
+  }
+  return `${year}-${month}-${date} ${hours}:${min}`
+}
 
 // 得到一个元素到body的距离
 export const getElementToBodyDistance = (element) => {
@@ -67,11 +81,10 @@ export const getElementToBodyDistance = (element) => {
   }
   return distance
 }
-
-export const cubic = value => Math.pow(value, 3);
-export const easeInOutCubic = value => value < 0.5
-  ? cubic(value * 2) / 2
-  : 1 - cubic((1 - value) * 2) / 2;
+export const checkEmail = (email) => {
+  let emailTest = new RegExp("^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$"); 
+  return emailTest.test(email)
+}
 
   // 传入元素到body的距离，滚动到该元素的位置
 export const scrollToElement = (distance) => {

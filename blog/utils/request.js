@@ -102,6 +102,33 @@ const apis = {
         reject(e)
       })
     })
+  },
+  publishComment(data){
+    return new Promise((resolve,reject) =>{
+      axios.post(`/api/publishComment`,data).then(res =>{
+        resolve(res)
+      }).catch(e =>{
+        reject(e)
+      })
+    })
+  },
+  checkLogin(data){
+    return new Promise((resolve,reject) =>{
+      axios.post(`/api/checkLogin`,data).then(res =>{
+        resolve(res)
+      }).catch(e =>{
+        reject(e)
+      })
+    })
+  },
+  getGusekList(){
+    return new Promise((resolve,reject) =>{
+      axios.get(`/api/getGusekList`).then(res =>{
+        resolve(res)
+      }).catch(e =>{
+        reject(e)
+      })
+    })
   }
 }
 
