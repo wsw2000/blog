@@ -6,8 +6,8 @@ class HomeService extends Service {
     const result = await this.app.mysql.query(sql);
     const comments_sql = `SELECT id,comment_id,is_reply,article_id,iconUrl, unamed, email, content,addTime,address,to_unamed from guestbook WHERE article_id = ${id}`;
     const comments = await this.app.mysql.query(comments_sql); // 总评论
-    const comments_list = comments.filter(item => item.comment_id != 0); // 评论
-    const reply_list = comments.filter(item => item.is_reply != 0); // 回复
+    const comments_list = comments.filter(item => item.comment_id != 0) || []; // 评论
+    const reply_list = comments.filter(item => item.is_reply != 0) || []; // 回复
 
     // 过滤出每条评论的回复列表
     const fliterReply = id => {
@@ -17,7 +17,7 @@ class HomeService extends Service {
       item.replyLists = fliterReply(item.comment_id);
     });
 
-    result[0].comments_list = comments_list;
+    result[0].comments_list = comments_list || [];
 
     return result;
   }
@@ -40,8 +40,8 @@ class HomeService extends Service {
   async getGusekList(){
     const comments_sql = `SELECT id,comment_id,is_reply,article_id,iconUrl, unamed, email, content,addTime,address,to_unamed from guestbook WHERE article_id = -1`
     const comments =await this.app.mysql.query(comments_sql)  //总留言
-    const comments_list = comments.filter(item => item.comment_id != 0); // 评论
-    const reply_list = comments.filter(item => item.is_reply != 0); // 回复
+    const comments_list = comments.filter(item => item.comment_id != 0) || []; // 评论
+    const reply_list = comments.filter(item => item.is_reply != 0) || []; // 回复
     // 过滤出每条评论的回复列表
     const fliterReply = id => {
       return reply_list.filter(item => item.is_reply == id);

@@ -2,9 +2,9 @@
 
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:7001/admin'
+// axios.defaults.baseURL = 'http://localhost:7001/admin'
 // axios.defaults.baseURL = 'http://120.78.195.82:7001/admin'
-// axios.defaults.baseURL = 'http://www.wsw2000.top:7001/admin'
+axios.defaults.baseURL = 'http://www.wsw2000.top:7001/admin'
 
 
 axios.defaults.withCredentials=true
