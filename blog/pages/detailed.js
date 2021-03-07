@@ -58,7 +58,7 @@ const Detailed = ({list,defaultState}) => {
     setContent('')
 
     return ()=>{
-
+      setActicleList([])
     }
   },[])
   //访问量
@@ -172,7 +172,7 @@ const Detailed = ({list,defaultState}) => {
   });
   let html = marked(articleContent) 
   return (
-    <div className={defaultState.visible ? 'next-right' : ''}>
+    <div className={ defaultState.visible && defaultState.visible ? 'next-right' : ''}>
       <Head>
         <title>{headTitle}</title>
       </Head>

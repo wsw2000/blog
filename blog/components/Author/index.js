@@ -1,15 +1,31 @@
-import { Avatar, Divider, Popover,Tag } from 'antd'
+import { Avatar, Divider, Popover,Tag,Menu,Icon } from 'antd'
 import { useEffect, useState } from 'react';
+import Router from 'next/router';
 import './index.less'
 import { PhotoProvider, PhotoSlider } from 'react-photo-view';
+import {connect} from 'react-redux';
+import {changeVisible} from '../../redux/action';
 import 'react-photo-view/dist/index.css';
-const Author = () => {
+const Author = (props) => {
   const [photoImages, setPhotoImages] = useState(['http://www.wsw2000.top/images/qq.png', 'http://www.wsw2000.top/images/wechat.png']);
   const [visible, setVisible] = useState(false);
   const [photoIndex, setPhotoIndex] = React.useState(0);
   const handlePhoto = (val) => {
     setPhotoIndex(val)
     setVisible(true)
+  }
+  //跳转到列表页
+  const handleClick = (e) => {
+    props.changeVisible({flag:false,listType:[]})
+    if (e.key == 0) {
+      Router.push('/index')
+      return
+    }
+    if(e.key == 4) {
+      Router.push('/gusekbook')
+      return
+    }
+    Router.push(`/list?id=${e.key}`)
   }
   useEffect(() => {
     var str = "天生我材必有用，千金散尽还复来。"
@@ -45,13 +61,36 @@ const Author = () => {
   return (
     <>
       <div className="author-div comm-box">
-        <div>
-          <Avatar size={90} src="http://www.wsw2000.top/huiyi/zhu.png" />
+        <div style={{cursor:'pointer'}}>
+          <Avatar onClick={()=> window.location.href='http://www.wsw2000.top:3000/'} size={90} src="http://www.wsw2000.top/images/avatar.png" />
         </div>
         <div className="author-introduction">
           <div id='introduction' style={{ color: 'deeppink', fontWeight: 'bold' }}>
             天生我材必有用，千金散尽还复来。
           </div>
+          {
+            props.defaultState && props.defaultState.listType && props.defaultState.visible ?
+            <>
+              <Divider>导航</Divider>
+              <Menu 
+              style={{width:'60%',margin:'0 auto',borderRight:'0'}} 
+              mode="vertical" 
+              onClick={handleClick}>
+                <Menu.Item key="0">
+                  <Icon type="home" />首页
+                </Menu.Item>
+              {
+                props.defaultState.listType.map(item => {
+                  return (
+                    <Menu.Item key={item.id}>
+                      <Icon type={item.icon} />{item.typeName}
+                    </Menu.Item>
+                  )
+                })
+              }
+            </Menu>
+            </> : null
+          }
           <Divider>技能</Divider>
           <div>
             <Tag color="cyan">Vue</Tag>
@@ -65,7 +104,7 @@ const Author = () => {
           </div>
           <Divider>社交帐号</Divider>
           <Popover content={'https://github.com/wsw2000'} placement="bottom">
-            <a href="https://github.com/wsw2000">
+            <a href="https://github.com/wsw2000" target='_blank'> 
               <Avatar size={28} icon="github" className="account" />
             </a>
           </Popover>
@@ -96,4 +135,8 @@ const Author = () => {
   )
 }
 
-export default Author
+export default connect(
+  state => ({
+    defaultState: state,
+  }),{changeVisible}
+)(Author)

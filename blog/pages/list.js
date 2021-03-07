@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import React, { useState,useEffect } from 'react'
 import Link from 'next/link'
+import Router from 'next/router';
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Footer from '../components/Footer'
@@ -10,6 +11,7 @@ import api from '../utils/request';
 import Iazyimg from '../components/lazyImg';
 import { Row, Col, List, Icon, Breadcrumb,Tag } from 'antd'
 import {connect} from 'react-redux';
+import LazyLoad from 'react-lazyload';
 const myList = ({result,defaultState}) => {
   const [types, setTypes] = useState(['技术','生活'])
   const [list, setList] = useState(result.res.data)
@@ -57,30 +59,33 @@ const myList = ({result,defaultState}) => {
               itemLayout="vertical"
               dataSource={list}   // 数据源
               renderItem={item => (
-              <List.Item className="listItem">
-                <div className="listItem-img">
-                  <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
-                </div>
-                <div className="listItem-content">
-                  <div className="listItem-content-title">
-                    <Tag color="geekblue">{item.typeName}</Tag>
-                    <Link href={{pathname:'/detailed',query:{id:item.id}}}>
-                      <a>{item.title}</a>
-                    </Link> 
-                  </div>
-                  <div className="listItem-content-introduce">
-                    <span>{item.introduce}</span>
-                  </div>
-                  <div className="listItem-content-footer">
-                    <div>
-                      <Icon type="fire" /><span>{item.view_count || 0}</span>
+                <LazyLoad height={200} offset={-200} >
+                  <List.Item className="listItem"
+                  onClick={()=>Router.push(`/detailed?id=${item.id}`)}>
+                    <div className="listItem-img">
+                      <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
                     </div>
-                    <div>
-                      <Icon type="calendar" /><span>{item.addTime}</span>
+                    <div className="listItem-content">
+                      <div className="listItem-content-title">
+                        <Tag color="geekblue">{item.typeName}</Tag>
+                        <Link href={{pathname:'/detailed',query:{id:item.id}}}>
+                          <a>{item.title}</a>
+                        </Link> 
+                      </div>
+                      <div className="listItem-content-introduce">
+                        <span>{item.introduce}</span>
+                      </div>
+                      <div className="listItem-content-footer">
+                        <div>
+                          <Icon type="fire" /><span>{item.view_count || 0}</span>
+                        </div>
+                        <div>
+                          <Icon type="calendar" /><span>{item.addTime}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </List.Item>
+                  </List.Item>
+                </LazyLoad>
               )}
             />
         </Col>

@@ -72,7 +72,7 @@ const WeatherContent = (props) => {
           ipLong &&
           <iframe
             width="100%"
-            height="40px"
+            height="80px"
             src={`https://embed.windy.com/embed2.html?lat=${ipLong.adlat}&lon=${ipLong.adlng}&detailLat=34.069&detailLon=-118.323&width=380&height=200&zoom=10&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`}
             frameBorder="0"
           >

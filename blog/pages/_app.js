@@ -16,6 +16,7 @@ export default class MyApp extends App {
   componentDidMount() {
     //国家公祭日,主页变灰色
     memorial()
+    console.log('%c 欢迎来到 wsw_blog! ', 'background: rgba(18, 141, 244, 0.1); color: #1890ff');
     // 点击 核心价值观
     let index = 0;
     const fnTextPopup = (event) => {

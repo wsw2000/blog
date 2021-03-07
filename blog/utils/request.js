@@ -129,6 +129,15 @@ const apis = {
         reject(e)
       })
     })
+  },
+  getDateMsg(date){
+    return new Promise((resolve,reject) =>{
+      axios.get(`/api/getDateMsg/${date}`).then(res =>{
+        resolve(res)
+      }).catch(e =>{
+        reject(e)
+      })
+    })
   }
 }
 

@@ -41,6 +41,7 @@ a {
     padding: 1.2rem;
     border: none;
     border-radius: 20px;
+    cursor: pointer;
     &-img{
       // min-height: 10rem;
       max-height: 13.2rem;
@@ -502,14 +503,15 @@ code {
   content: '';
   position: absolute;
   transition: all .6s;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(3, 0, 0, 0.4);
-  z-index: 999;
-  opacity: 1;
+  background-color: rgba(34, 31, 31, 0.4);
   border-radius: .3rem;
+  background-image: url(https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/images/grid.png);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  background-attachment: fixed;
 }
 
 /* 过度动画 */
@@ -598,4 +600,40 @@ code {
     opacity: 1;
     transform: translate3d(0,0,0);
   }
+}
+
+.ant-drawer-body{
+  padding: 12px!important;
+}
+//滚动条 
+::-webkit-scrollbar {  /* 滚动条整体部分 */
+  width:5px;
+  margin-right:2px
+}
+// ::-webkit-scrollbar-button { /* 滚动条两端的按钮 */
+//   width:10px;
+//   background-color: yellow;
+// }
+::-webkit-scrollbar:horizontal {
+  height:10px;
+  margin-bottom:2px
+}
+::-webkit-scrollbar-track {  /* 外层轨道 */
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track-piece {  /*内层轨道，滚动条中间部分 */
+  background-color: #c2bdeb;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {  /* 滑块 */
+  width:5px;
+  border-radius: 5px;
+  background: #1296db;
+}
+::-webkit-scrollbar-corner { /* 边角 */
+  width: 5px;
+  background-color: red;
+}
+::-webkit-scrollbar-thumb:hover { /* 鼠标移入滑块 */
+  background: #c2bdeb;
 }

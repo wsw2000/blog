@@ -6,6 +6,7 @@ import Header from '../components/Header'
 import Author from '../components/Author'
 import Sentence from '../components/sentence';
 import Footer from '../components/Footer'
+import LazyLoad from 'react-lazyload';
 import api from '../utils/request';
 import {timefilter} from '../utils';
 import { Row, Col, List, Icon,Tag } from 'antd'
@@ -35,7 +36,7 @@ const Home = ({list,defaultState}) => {
     }
   }); 
 
-  const mylist= list.data
+  const [mylist,setMyList] = useState(list.data)
   const [headTitle, setHeadTitle] = useState('首页 | 吴朝温 | 前端学习笔记 | 吴绍温个人博客')
 
   Router.events.on('routeChangeStart',(...args)=>{
@@ -53,6 +54,7 @@ const Home = ({list,defaultState}) => {
     // 在此可以执行任何带副作用操作
     return () => { 
       checkTitle()
+      setMyList([])
       // 在组件卸载前执行
       // 在此做一些收尾工作, 比如清除定时器/取消订阅等
     }
@@ -74,30 +76,34 @@ const Home = ({list,defaultState}) => {
             itemLayout="vertical"
             dataSource={mylist}   // 数据源
             renderItem={item => (
-              <List.Item className="listItem cssnice">
-                <div className="listItem-img">
-                  <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
-                </div>
-                <div className="listItem-content">
-                  <div className="listItem-content-title">
-                    <Tag color="geekblue">{item.typeName}</Tag>
-                    <Link href={{pathname:'/detailed',query:{id:item.id}}}>
-                      <a>{item.title}</a>
-                    </Link> 
-                  </div>
-                  <div className="listItem-content-introduce">
-                    <span>{item.introduce}</span>
-                  </div>
-                  <div className="listItem-content-footer">
-                    <div>
-                      <Icon type="fire" /><span>{item.view_count || 0}</span>
+              <LazyLoad height={200} offset={-200} >
+                <List.Item 
+                  className="listItem cssnice"
+                  onClick={()=>Router.push(`/detailed?id=${item.id}`)}>
+                    <div className="listItem-img">
+                      <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
                     </div>
-                    <div>
-                      <Icon type="calendar" /><span>{item.addTime}</span>
+                    <div className="listItem-content">
+                      <div className="listItem-content-title">
+                        <Tag color="geekblue">{item.typeName}</Tag>
+                        <Link href={{pathname:'/detailed',query:{id:item.id}}}>
+                          <a>{item.title}</a>
+                        </Link> 
+                      </div>
+                      <div className="listItem-content-introduce">
+                        <span>{item.introduce}</span>
+                      </div>
+                      <div className="listItem-content-footer">
+                        <div>
+                          <Icon type="fire" /><span>{item.view_count || 0}</span>
+                        </div>
+                        <div>
+                          <Icon type="calendar" /><span>{item.addTime}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </List.Item>
+                </List.Item>
+              </LazyLoad>
             )}
           />
         </Col>

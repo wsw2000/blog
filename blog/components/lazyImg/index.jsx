@@ -8,7 +8,8 @@ function Iazyimg(props){
       {/* {console.log(props)} */}
       { 
         (props && props.src) ?
-        <div style={{width:'100%',height:'100%'}} className={`${props.themeType == 3 ? "img-dark-responsive" : ''}`}>
+        <div style={{width:'100%',height:'100%'}} 
+        className={`${props.themeType == 3 ? "img-dark-responsive" : ''}`}>
           <img src={props.src} alt={props.alt}  />
         </div>
         : <div> 

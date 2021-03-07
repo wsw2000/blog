@@ -16,6 +16,17 @@ class HomeController extends Controller {
     }
     this.ctx.body = { data: '登录失败',code: 0 };
   }
+  //每日一句
+  async getDateMsg() {
+    const date = this.ctx.params.date;
+    const result = await this.ctx.curl(`http://sentence.iciba.com/index.php?c=dailysentence&m=getdetail&title=${date}`,{
+      dataType: 'json',
+      method: 'GET'
+    })
+    this.ctx.body = {
+      data: result,
+    };
+  }
   // 总的文章列表
   async getArticleList() {
     // "FROM_UNIXTIME(article.addTime,'%Y-%m-%d %H:%i:%s') as addTime,"+
@@ -157,9 +168,6 @@ class HomeController extends Controller {
   }
   // 根据文章id增加访问量
   async postVisits() {
-    console.log('-------------------------');
-
-    console.log(this.ctx.request.body);
     const id = this.ctx.request.body.id;
     const sql = `UPDATE article set view_count = view_count + 1 where id = ${id}`;
     const result = await this.app.mysql.query(sql);

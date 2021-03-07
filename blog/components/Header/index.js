@@ -12,7 +12,6 @@ import Sentence from '../sentence';
 import { loadScript } from '../../utils'
 import WeatherContent from '../WeatherContent';
 const Header = (props) => {
-  const [visible, setVisible] = useState(false);
   const [listType, setlistType] = useState([])
   const [menuFlag, setMenuFlag] = useState(false);
   // 暗黑主题类型
@@ -25,7 +24,7 @@ const Header = (props) => {
     const { data: res } = await api.getActicleType()
     setlistType(res.data)
     return () => {
-      setVisible(false)
+      // setVisible(false)
       setlistType([])
     }
   }, [])
@@ -45,12 +44,10 @@ const Header = (props) => {
     setMenuFlag((menuFlag) => {
       return !menuFlag
     })
-    setVisible(true)
-    props.changeVisible(true)
+    props.changeVisible({flag:true,listType})
   }
   const hideVisible = () => {
-    setVisible(false)
-    props.changeVisible(false)
+    props.changeVisible({flag:false,listType:[]})
   }
 
   const getIpWeatherInfo = () => {
@@ -228,7 +225,7 @@ const Header = (props) => {
           placement="right"
           closable={true}
           onClose={hideVisible}
-          visible={visible}
+          visible={props.defaultState.visible}
           width={'80%'}
         >
           <div>

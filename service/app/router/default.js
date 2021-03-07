@@ -10,4 +10,6 @@ module.exports = app => {
   router.post('/api/publishComment/', controller.default.home.publishComment);
   router.post('/api/checkLogin/', controller.default.home.checkLogin);
   router.get('/api/getGusekList/', controller.default.home.getGusekList);
+  router.get('/api/getDateMsg/:date', controller.default.home.getDateMsg);
+
 };
