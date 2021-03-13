@@ -1,7 +1,8 @@
 import React,{ useState,useEffect } from 'react'
 import apis from '../../utils/request'
-import { Table, Tag, Space, Modal,message,Button } from 'antd';
+import { Table, Space, Modal,message,Button } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { timeFilter } from '../../utils/index'
 function ArticleList(props) {
   const [listLoading,setListLoading] = useState(false)
   const [articleList,setArticleList] = useState([])
@@ -30,7 +31,7 @@ function ArticleList(props) {
   }
   const getlist = async() => {
     const {data:res} = await apis.getArticleList()
-    if(res.data == '登录失败'){
+    if(res.data === '登录失败'){
       props.history.push('/login')
       return
     }
@@ -45,9 +46,19 @@ function ArticleList(props) {
     { title: 'id',dataIndex: 'id',key: 'id',align:'center' },
     { title: '标题',dataIndex: 'title',key: 'title',align:'center' },
     { title: '介绍',dataIndex: 'introduce',key: 'introduce',align:'center' },
-    { title: '时间',dataIndex: 'addTime',key: 'addTime',align:'center' },
+    { title: '时间',dataIndex: 'addTime',key: 'addTime',align:'center',
+    render: time =>(
+      <>{timeFilter(time)}</>
+    )},
     { title: '类型',dataIndex: 'typeName',key: 'typeName',align:'center' },
-    { title: '内容',dataIndex: 'content',key: 'content',width:500 },
+    { title: '图片',dataIndex: 'imgUrl',key: 'imgUrl',align:'center',width:300,
+    render: imgUrl => (
+      <>
+        <img style={{width:'100%',borderRadius:'15px'}} src={imgUrl} alt=""/>
+      </>
+    )},
+
+    // { title: '内容',dataIndex: 'content',key: 'content',width:500},
     {
       title: '操作',
       dataIndex: 'action',

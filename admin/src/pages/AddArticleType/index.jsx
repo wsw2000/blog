@@ -2,11 +2,9 @@ import React,{useEffect,useState} from 'react'
 import { Table, Space, Modal,message,Button,Input } from 'antd';
 import apis from '../../utils/request'
 function AddArticleType(props) {
-  {console.log(props);}
   const [typeid,setTypeId] = useState(0)
   const [loading,setLoading] = useState(false)
   const [addModal,setAddModal] = useState(false)
-  const [delModal,setDelModal] = useState(false)
   const [typeName,setTypeName] = useState('')
   const [icon,setIcon] = useState('')
   const [typeList,setTypeList] = useState([])

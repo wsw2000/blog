@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  SyntaxError: C:\Users\94462\Desktop\wsw_blog\admin\package.json: Unexpected token / in JSON at position 64
+  SyntaxError: C:\Users\94462\Desktop\wsw_blog\admin\package.json: Unexpected token / in JSON at position 727
       at JSON.parse (<anonymous>)
       at C:\Users\94462\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
       at Generator.next (<anonymous>)
@@ -26,13 +26,14 @@ npm manifest:
     "name": "admin",
     "version": "0.1.0",
     "private": true,
-    // "homepage": "./",
     "dependencies": {
       "@testing-library/jest-dom": "^5.11.4",
       "@testing-library/react": "^11.1.0",
       "@testing-library/user-event": "^12.1.10",
       "antd": "^4.12.3",
       "axios": "^0.21.1",
+      "echarts": "^5.0.2",
+      "eslint-plugin-react-hooks": "^0.0.0-ec372faef",
       "marked": "^2.0.0",
       "react": "^17.0.1",
       "react-dom": "^17.0.1",
@@ -47,10 +48,11 @@ npm manifest:
       "eject": "react-scripts eject"
     },
     "eslintConfig": {
-      "extends": [
-        "react-app",
-        "react-app/jest"
-      ]
+      "plugins": ["react-hooks"]
+      // "rules": {
+      //   "react-hooks/rules-of-hooks": "error",
+      //   "react-hooks/exhaustive-deps": "warn" // <--- THIS IS THE NEW RULE
+      // }
     },
     "browserslist": {
       "production": [
@@ -4364,6 +4366,14 @@ Lockfile:
       jsbn "~0.1.0"
       safer-buffer "^2.1.0"
   
+  echarts@^5.0.2:
+    version "5.0.2"
+    resolved "https://registry.npm.taobao.org/echarts/download/echarts-5.0.2.tgz?cache=0&sync_timestamp=1612592564808&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fecharts%2Fdownload%2Fecharts-5.0.2.tgz#1726d17a57cf05d62cd0567b4325e1201a56baf6"
+    integrity sha1-FybRelfPBdYs0FZ7QyXhIBpWuvY=
+    dependencies:
+      tslib "2.0.3"
+      zrender "5.0.4"
+  
   ee-first@1.1.1:
     version "1.1.1"
     resolved "https://registry.npm.taobao.org/ee-first/download/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -4658,6 +4668,11 @@ Lockfile:
       has "^1.0.3"
       jsx-ast-utils "^3.1.0"
       language-tags "^1.0.5"
+  
+  eslint-plugin-react-hooks@^0.0.0-ec372faef:
+    version "0.0.0-ec372faef"
+    resolved "https://registry.npm.taobao.org/eslint-plugin-react-hooks/download/eslint-plugin-react-hooks-0.0.0-ec372faef.tgz?cache=0&sync_timestamp=1615392893215&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-plugin-react-hooks%2Fdownload%2Feslint-plugin-react-hooks-0.0.0-ec372faef.tgz#559e5c9e128472488b4d3defa3bd1638284fd19d"
+    integrity sha1-VZ5cnhKEckiLTT3vo70WOChP0Z0=
   
   eslint-plugin-react-hooks@^4.2.0:
     version "4.2.0"
@@ -11208,6 +11223,11 @@ Lockfile:
       minimist "^1.2.0"
       strip-bom "^3.0.0"
   
+  tslib@2.0.3:
+    version "2.0.3"
+    resolved "https://registry.npm.taobao.org/tslib/download/tslib-2.0.3.tgz?cache=0&sync_timestamp=1609887539329&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftslib%2Fdownload%2Ftslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+    integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
+  
   tslib@^1.8.1, tslib@^1.9.0:
     version "1.14.1"
     resolved "https://registry.npm.taobao.org/tslib/download/tslib-1.14.1.tgz?cache=0&sync_timestamp=1609887539329&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftslib%2Fdownload%2Ftslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
@@ -12102,3 +12122,10 @@ Lockfile:
     version "0.1.0"
     resolved "https://registry.npm.taobao.org/yocto-queue/download/yocto-queue-0.1.0.tgz?cache=0&sync_timestamp=1606290282107&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fyocto-queue%2Fdownload%2Fyocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
     integrity sha1-ApTrPe4FAo0x7hpfosVWpqrxChs=
+  
+  zrender@5.0.4:
+    version "5.0.4"
+    resolved "https://registry.npm.taobao.org/zrender/download/zrender-5.0.4.tgz?cache=0&sync_timestamp=1612184093375&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fzrender%2Fdownload%2Fzrender-5.0.4.tgz#89c355af908b9f64a301b38f751b7951f2c8a95a"
+    integrity sha1-icNVr5CLn2SjAbOPdRt5UfLIqVo=
+    dependencies:
+      tslib "2.0.3"

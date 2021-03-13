@@ -103,9 +103,16 @@ const Author = (props) => {
             <Tag color="green">Js</Tag>
           </div>
           <Divider>社交帐号</Divider>
-          <Popover content={'https://github.com/wsw2000'} placement="bottom">
+           <Popover content={'码云：https://gitee.com/wu_chao_wen'} placement="bottom">
+            <a href="https://gitee.com/wu_chao_wen" target='_blank'> 
+              <Avatar style={{background:(props.defaultState.isFixed)?'#c2bdeb':'#999999'}} size={28}  className="account">
+               gitee
+              </Avatar>
+            </a>
+          </Popover>
+          <Popover content={'GitHub：https://github.com/wsw2000'} placement="bottom">
             <a href="https://github.com/wsw2000" target='_blank'> 
-              <Avatar size={28} icon="github" className="account" />
+              <Avatar style={{background:(props.defaultState.isFixed)?'#c2bdeb':'#999999'}} size={28} icon="github" className="account" />
             </a>
           </Popover>
           <Popover
@@ -117,10 +124,10 @@ const Author = (props) => {
                 />
               </>
             } placement="bottom">
-            <Avatar size={28} icon="qq" className="account" />
+            <Avatar style={{background:(props.defaultState.isFixed)?'#c2bdeb':'#999999'}} size={28} icon="qq" className="account" />
           </Popover>
           <Popover content={<><img src="http://www.wsw2000.top/images/wechat.png" onClick={() => handlePhoto(1)} style={{ width: '150px' }} alt="wechat" /></>} placement="bottom">
-            <Avatar size={28} icon="wechat" className="account" />
+            <Avatar style={{background:(props.defaultState.isFixed)?'#c2bdeb':'#999999'}} size={28} icon="wechat" className="account" />
           </Popover>
         </div>
       </div>

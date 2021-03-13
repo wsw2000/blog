@@ -26,6 +26,8 @@ const GusekBook = ({defaultState,guestList}) => {
   const [replyModal, setReplyModal] = useState(false);  
   const [userName, setUserName] = useState('');  
   const [passWord, setPassWord] = useState('');  
+  const [location, setLocation] = useState({});  
+
   const checkTitle = () =>{
     document.addEventListener('visibilitychange',function(){
       var isHidden = document.hidden;
@@ -36,6 +38,8 @@ const GusekBook = ({defaultState,guestList}) => {
   useEffect(() => { 
     checkTitle()
     // 在此可以执行任何带副作用操作
+    const location = JSON.parse(localStorage.getItem('location')) || {}
+    setLocation(location)
     const unamed = localStorage.getItem('unamed') || ''
     const email = localStorage.getItem('email') || ''
     let avatar_url = email.split('@')[0]
@@ -94,12 +98,11 @@ const GusekBook = ({defaultState,guestList}) => {
       message.success('主人你回来啦！请发言')
 
     }
-    const city = JSON.parse(localStorage.getItem('city')) || {}
     const commentInfo = {
       article_id:-1,   //留言墙的article_id固定-1
       unamed:unamed,
       email:email,
-      address:`${city.province}${city.city}`,
+      address:`${location.province}${location.city}`,
       content:content,
       addTime:Date.now(),
       to_unamed:toUnamed,
@@ -192,7 +195,7 @@ const GusekBook = ({defaultState,guestList}) => {
                     <div className="replyBtn" onClick={()=>handleReply(item.comment_id)}>回复</div>
                   </div>
                   <div className="time">
-                    <div>{item.address}</div>
+                    <div>{item.address ? item.address : 'CHINA'}</div>
                     <div>{timefilter(item.addTime)}</div>
                   </div>
                   <div className="content">{item.content}</div>
@@ -223,7 +226,7 @@ const GusekBook = ({defaultState,guestList}) => {
                           }
                         </div>
                         <div className="time">
-                          <div>{item1.address}</div>
+                          <div>{item1.address ? item1.address : 'CHINA'}</div>
                           <div>{timefilter(item1.addTime)}</div>
                         </div>
                         <div className="content">{item1.content}</div>

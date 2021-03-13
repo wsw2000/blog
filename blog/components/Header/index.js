@@ -7,7 +7,7 @@ import Link from 'next/link';
 import api from '../../utils/request';
 import Router from 'next/router';
 import IconFont from '../IconFont'
-import Author from '../Author';
+import Author from '../Author'; 
 import Sentence from '../sentence';
 import { loadScript } from '../../utils'
 import WeatherContent from '../WeatherContent';
@@ -57,7 +57,7 @@ const Header = (props) => {
       setIpWeather(res.data.data[0])
       const adlng = res.data.data[0].adlng
       const adlat = res.data.data[0].adlat
-      localStorage.setItem('city',JSON.stringify({
+      localStorage.setItem('location',JSON.stringify({
         province:res.data.data[0].province,
         city:res.data.data[0].city
       }))
@@ -88,7 +88,7 @@ const Header = (props) => {
   //检测是否滚动
   const scrollMove = () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    if (scrollTop) {
+    if (scrollTop >= 100) {
       props.changeFixed(true)
     }else {
       props.changeFixed(false)

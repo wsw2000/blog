@@ -22,6 +22,7 @@ module.exports = appInfo => {
   const userConfig = {
     // myAppName: 'egg',
   };
+  config.uploadDir = 'app/public/upload';
   config.mysql = {
     // database configuration
     client: {
@@ -41,17 +42,18 @@ module.exports = appInfo => {
     csrf: {
       enable: false
     },
-    domainWhiteList: ['http://localhost:3000','http://localhost:9000','http://127.0.0.1:3000',
-    'http://127.0.0.1:9000','http://120.78.195.82:3000'']
+    domainWhiteList: ['http://localhost:3000','http://127.0.0.1:7001','http://localhost:9000','http://127.0.0.1:3000',
+    'http://127.0.0.1:9000','http://120.78.195.82:3000','http://120.78.195.82',
+    'http://www.wsw2000.top:3000','http://www.wsw2000.top','http://192.168.1.58:9000/']
   };
   config.cors = {
     // origin: ['http://localhost:3000','http://localhost:9001'],   //允许什么域名
     credentials: true,  //允许Cook可以跨域
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'  
   };
   config.session = {
     key: 'openId',  // 设置session cookie里面的key
-    maxAge: 1000 * 60 * 60 * 24, // 设置过期时间
+    maxAge: 1000 * 60 * 60 * 24 * 2, // 设置过期时间
     httpOnly: true,
     encrypt: true,
     //renew: true         // renew等于true 那么每次刷新页面的时候 session都会被延期

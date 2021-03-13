@@ -21,13 +21,14 @@ echarts.use(
 function ArticleWord(props) {
   useEffect(() => {
     apis.getArticlePie().then(res => {
-      if (res.data.code !== 1) {
+      if (res.code == 1) {  
+        message.error('未登录');
         props.history.push('/login')
         return
       }
       initPie(res.data.countList,res.data.total)
     })
-  }, []);
+  }, [props]);
   const initPie = (data,total) => {
     var chart = echarts.init(document.querySelector('.pieMain'));
     let option = {
