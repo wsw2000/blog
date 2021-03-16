@@ -31,9 +31,9 @@ axios.interceptors.response.use(
 
 const apis = {
   //文章列表
-  getArticleList(){
+  getArticleList(params){
     return new Promise((resolve,reject) =>{
-      axios.get(`/api/getArticleList`).then(res =>{
+      axios.get(`/api/getArticleList`,{params}).then(res =>{
         resolve(res)
       }).catch(e =>{
         reject(e)

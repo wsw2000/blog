@@ -31,6 +31,8 @@ module.exports = appInfo => {
       user: 'root',
       password: '123456',  //线下
       database: 'wsw_blog',
+      // 存储四字节的表情
+      charset: 'utf8mb4',
     },
     // load into app, default is open
     app: true,

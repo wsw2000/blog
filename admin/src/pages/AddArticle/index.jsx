@@ -5,7 +5,7 @@ import hljs from "highlight.js";
 import moment from 'moment'
 import "highlight.js/styles/monokai-sublime.css";  // highlight颜色
 import './index.css'
-import { Row, Col, Input, Select, Button, DatePicker,message ,Upload } from 'antd'
+import { Row, Col, Input, Select, Button, DatePicker,message ,Upload,Switch } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import apis from '../../utils/request'
 import { timeFilter,getBase64,beforeUpload } from '../../utils/index.js'
@@ -24,36 +24,37 @@ function AddArticle(props) {
   const [selectedType, setSelectType] = useFetchState('请选择类别') //选择的文章类别
   const [loading, setLoading] = useFetchState(false);
   const [imgUrl, setImgUrl] = useFetchState('');
+  const [isShow,setIsShow] = useFetchState(false);   //页面是否展示主图
 
   //根据id获取文章详情
   const getArticleById = async(id) =>{
     const {data:res} = await apis.getArticleById(id)
-    // console.log(res);
     if(res.code !== 1) return
-    // console.log(res.data[0]);
     setArticleTitle(res.data[0].title)
     setArticleContent(res.data[0].content)
     setIntroducemd(res.data[0].introduce)
-
     let html=marked(res.data[0].content)
     setMarkdownContent(html)
     
     let tmpInt = marked(res.data[0].introduce)
     setIntroducehtml(tmpInt)
     setShowDate( timeFilter(res.data[0].addTime) )
-    setSelectType(res.data[0].typeId)
+    console.log(res.data[0]);
+    setSelectType(res.data[0].typeid)
     setImgUrl(res.data[0].imgUrl)
+    setIsShow(res.data[0].isShow)
   }
   useEffect(()=>{
     // const openId = localStorage.getItem('openId')
       //文章类别 + 路由守卫
     const getTypeInfo = async() =>{
       const {data:res} = await apis.getTypeInfo()
-      if(res.data === '登录失败' || !res){
+      console.log(res);
+      if(res.data === '登录失败' || res.code != 1){
         localStorage.removeItem('openId')
         props.history.push('/login')  
       }else {
-        setTypeInfo(res.data)
+        setTypeInfo(res.typedatas)
       }
     }
     getTypeInfo()
@@ -117,6 +118,7 @@ function AddArticle(props) {
       introduce:introducemd,
       imgUrl:imgUrl,
       addTime:(new Date(showDate).valueOf()),
+      isShow:isShow
     }
     if(articleId === 0) {  //新增
       addArticle.view_count = 0
@@ -166,11 +168,11 @@ function AddArticle(props) {
                 }} />
             </Col>
             <Col span={4}>
-              <Select defaultValue={selectedType} size="large" onSelect={value => setSelectType(value)}>
+              <Select value={selectedType} size="large" onSelect={value => setSelectType(value)}>
                 {
                   typeInfo.map(item =>{
                     return (
-                      <Option key={item.id} value={item.id}>{item.typeName}</Option>
+                      <Option disabled={ item.id === 4 } key={item.id} value={item.id}>{item.typeName}</Option>
                     )
                   })
                 }
@@ -228,11 +230,20 @@ function AddArticle(props) {
             </Col>
             <Col span={24}>
               <br/>
-              <Button size="large">暂存文章</Button>&nbsp;
-              <Button type="primary" size="large" onClick={saveArticle}>发布文章</Button>
+              <Button style={{width:'100%'}} type="primary" size="large" onClick={saveArticle}>发布文章</Button>
             </Col>
             <Col span={24}>
               <br/>
+              <Input
+                placeholder="文章主图"
+                size="large"
+                value={imgUrl}
+                allowClear
+                onChange={e=>{
+                  setImgUrl(e.target.value)}} />
+                  
+            </Col>
+            <Col span={24} style={{display:'flex',alignItems:'center',margin:'20px 0'}}>
               <Upload
                 name='avatar'
                 listType="picture-card"
@@ -241,6 +252,7 @@ function AddArticle(props) {
                 action={`${apis.baseURL}/saveAvatar`}
                 beforeUpload={beforeUpload}
                 onChange={handleChange}
+                style={{width:'50%'}}
               >
               {                
                 <div>
@@ -249,11 +261,14 @@ function AddArticle(props) {
                 </div>
               }
               </Upload>
+              <div>
+                是否展示：<Switch checked={isShow} onChange={checked=>{setIsShow(checked)}} />
+              </div>
             </Col>
             <Col span={24}>
               { 
                 imgUrl ? <img src={imgUrl} alt="avatar" style={{ width: '100%' }} /> 
-                : <img src='https://api.btstu.cn/sjbz/api.php?lx=dongman&format=images' alt="avatar" style={{ width: '100%' }}/>
+                : null
               }
             </Col>
           </Row>

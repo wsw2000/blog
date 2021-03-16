@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import apis from '../../utils/request'
 import * as echarts from 'echarts/core';
 import {
@@ -21,19 +21,20 @@ echarts.use(
 function ArticleWord(props) {
   useEffect(() => {
     apis.getArticlePie().then(res => {
-      if (res.code == 1) {  
+      if (res.data.code == -1) {  
+        console.log(res);
         message.error('未登录');
         props.history.push('/login')
         return
       }
       initPie(res.data.countList,res.data.total)
     })
-  }, [props]);
+  }, []);
   const initPie = (data,total) => {
     var chart = echarts.init(document.querySelector('.pieMain'));
     let option = {
       title: {
-        text: `文章统计${total}篇`,
+        text: `文章统计${total || 0}篇`,
         left: 'center'
       },
       tooltip: {

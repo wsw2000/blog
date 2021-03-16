@@ -1,11 +1,17 @@
 import React,{ useState,useEffect } from 'react'
 import apis from '../../utils/request'
-import { Table, Space, Modal,message,Button } from 'antd';
+import { Table, Space, Modal,message,Button,Select } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { timeFilter } from '../../utils/index'
+import useFetchState  from '../../utils/useFetchState'
+
+const { Option } = Select;
+
 function ArticleList(props) {
-  const [listLoading,setListLoading] = useState(false)
-  const [articleList,setArticleList] = useState([])
+  const [listLoading,setListLoading] = useFetchState(false)
+  const [articleList,setArticleList] = useFetchState([])
+  const [typeInfo, setTypeInfo] = useFetchState([])
+  const [selectedType, setSelectType] = useFetchState('请选择类别') //选择的文章类别
   const handEdit = (id) => {
     props.history.push('/home/add/'+id)
   }
@@ -29,6 +35,15 @@ function ArticleList(props) {
       },
     });
   }
+  const getTypeInfo = async() => {
+    const {data:res} = await apis.getTypeInfo()
+    if(res.data === '登录失败' || res.code != 1){
+      localStorage.removeItem('openId')
+      props.history.push('/login')  
+    }else {
+      setTypeInfo(res.typedatas)
+    }
+  }
   const getlist = async() => {
     const {data:res} = await apis.getArticleList()
     if(res.data === '登录失败'){
@@ -37,9 +52,22 @@ function ArticleList(props) {
     }
     setArticleList(res.list)
   }
+  const getListByType =async () => {
+    if(selectedType !== '请选择类别' && selectedType !== 0) {
+      const {data:res} = await apis.getListByType(selectedType)
+      setArticleList(res.data)
+    } else {
+      getlist()   //文章列表
+    }
+  }
+  useEffect(()=>{
+    getListByType()
+    console.log(selectedType);
+  },[selectedType])
   useEffect(() => {
     setListLoading(true)
-    getlist()
+    getTypeInfo()  //文章类别
+    getlist()   //文章列表
     setListLoading(false)
   }, []);
   const columns = [
@@ -74,6 +102,16 @@ function ArticleList(props) {
   ];
   return (
     <>
+     <Select value={selectedType} size="large" onSelect={value => setSelectType(value)}>
+        {
+          typeInfo.map(item =>{
+            return (
+              <Option disabled={ item.id === 4 } key={item.id} value={item.id}>{item.typeName}</Option>
+            )
+          })
+        }
+        <Option value={0}>全部</Option>
+      </Select>
       <Table 
         loading={listLoading} 
         bordered 
@@ -81,7 +119,7 @@ function ArticleList(props) {
         dataSource={articleList} 
         mountNode
         rowKey={(item) => item.id}
-        pagination={{ position: ['topLeft'],defaultPageSize:5 }} 
+        pagination={{ position: ['topRight'],defaultPageSize:5 }} 
       />
     </>
   )

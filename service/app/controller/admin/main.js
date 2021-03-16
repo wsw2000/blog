@@ -22,8 +22,19 @@ class MainController extends Controller {
     this.ctx.session.openId = null;
     this.ctx.body = { data: "退出成功", code: -1 };
   }
+  //文章类别
   async getTypeInfo() {
-    const data = await this.app.mysql.select("type");
+    const data = await this.app.mysql.select('type');
+    this.ctx.body = { 
+      code: 1,
+      typedatas: data.filter(item => item.id != -1),
+      musicUrl : data.filter(item => item.id == -1),
+    };
+  }
+  // 根据文章分类id查询
+  async getListByType() {
+    const id = this.ctx.params.id;
+    const data = await this.ctx.service.home.getListByType(id);
     this.ctx.body = { data };
   }
   // 添加文章类别
@@ -74,30 +85,30 @@ class MainController extends Controller {
     };
   }
   async getArticlePie() {
-    const sql =
-      "SELECT type.id as id,type.typeName as name FROM type ORDER BY type.id ASC";
+    const sql = "SELECT type.id as id,type.typeName as name FROM type ORDER BY type.id ASC";
     const result = await this.app.mysql.query(sql);
     const sql2 = `SELECT  count(*) as total,  
-    sum(case when type_id= 1 then 1 else 0 end ) as ${result[0].name},     
-    sum(case when type_id=2 then 1 else 0 end ) as ${result[1].name},
-    sum(case when type_id=3 then 1 else 0 end ) as ${result[2].name}  FROM article`;
+    sum(case when type_id= 1 then 1 else 0 end ) as ${result[1].name},     
+    sum(case when type_id=2 then 1 else 0 end ) as ${result[2].name},
+    sum(case when type_id=3 then 1 else 0 end ) as ${result[3].name}  FROM article`;
     // asc升序
 
     const countList = await this.app.mysql.query(sql2);
-    result.forEach((item) => {
+    const result1 = result.filter(item => item.id != -1)
+    result1.forEach((item) => {
       const { name } = item;
       item.value = countList[0][name];
     });
 
     this.ctx.body = {
       total: countList[0].total,
-      countList: result,
+      countList: result1,
       code: 1,
     };
   }
   // 文章列表
   async getArticleList() {
-    const sql = `SELECT article.id as id,article.imgUrl as imgUrl,article.title as title,article.content as content,article.introduce as introduce,article.addTime as addTime,type.typeName as typeName FROM article LEFT JOIN type ON article.type_id = type.id ORDER BY article.id DESC
+    const sql = `SELECT article.id as id,article.imgUrl as imgUrl,article.isShow as isShow,article.title as title,article.content as content,article.introduce as introduce,article.addTime as addTime,type.typeName as typeName FROM article LEFT JOIN type ON article.type_id = type.id ORDER BY article.id DESC
     `;
     // asc升序
     const result = await this.app.mysql.query(sql);
@@ -121,6 +132,7 @@ class MainController extends Controller {
     const sql = `SELECT article.id as id,
     article.title as title,
     article.imgUrl as imgUrl,
+    article.isShow as isShow,
     article.introduce as introduce,
     article.content as content,
     article.addTime as addTime,

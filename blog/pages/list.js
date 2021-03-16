@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useState,useEffect } from 'react'
+import React, {useEffect } from 'react'
 import Link from 'next/link'
 import Router from 'next/router';
 import Header from '../components/Header'
@@ -7,18 +7,24 @@ import Author from '../components/Author'
 import Footer from '../components/Footer'
 import Sentence from '../components/sentence';
 import {timefilter} from '../utils';
-import api from '../utils/request';
+import apis from '../utils/request';
 import Iazyimg from '../components/lazyImg';
-import { Row, Col, List, Icon, Breadcrumb,Tag } from 'antd'
+import { Row, Col, List, Icon, Breadcrumb,Tag,Radio,Divider,Button,Spin } from 'antd'
 import {connect} from 'react-redux';
 import LazyLoad from 'react-lazyload';
-const myList = ({result,defaultState}) => {
-  const [types, setTypes] = useState(['技术','生活'])
-  const [list, setList] = useState(result.res.data)
-  useEffect(()=>{
-    setList(result.res.data)
-  })   
-  const [headTitle, setHeadTitle] = useState('博客列表 | 吴绍温个人博客 | 前端学习笔记')
+import useFetchState from '../utils/useFetchState';
+const myList = ({articleList,typeId,defaultState}) => {
+  const [list, setList] = useFetchState(articleList.data)
+  const [btnLoading,setBtnLoading] = useFetchState(false)
+  const [isEnd,setIsEnd] = useFetchState(articleList.end)
+  const [listLoading,setListLoading] = useFetchState(false)
+  const [page,setPage] = useFetchState(1)
+  const [limit,setLimit] = useFetchState(5)
+  const [orderType,setOrderType] = useFetchState('Time')
+  const [order,setOrder] = useFetchState('DESC')
+  const [typeName,setTypeName] = useFetchState('')
+
+  const [headTitle, setHeadTitle] = useFetchState('博客列表 | 吴绍温个人博客 | 前端学习笔记')
   const checkTitle = () =>{
     document.addEventListener('visibilitychange',function(){
       var isHidden = document.hidden;
@@ -26,15 +32,69 @@ const myList = ({result,defaultState}) => {
       !isHidden && setHeadTitle('博客列表 | 吴绍温个人博客 | 前端学习笔记')
     })
   }
+  useEffect(()=>{
+    setList(articleList.data)
+    setPage(1)
+    setOrderType('Time')
+    setIsEnd(articleList.end)
+  },[typeId])   //监听typeId时
   useEffect(() => { 
     checkTitle()
-    // 在此可以执行任何带副作用操作
+    setList(articleList.data)
     return () => { 
       checkTitle()
-      // 在组件卸载前执行
-      // 在此做一些收尾工作, 比如清除定时器/取消订阅等
+      setList([])
     }
   },[]) 
+  //最热还是最新
+  const changeListOrder = (value) =>{
+    setPage(1)
+    setOrderType(value)
+    setListLoading(true)
+    const params = {
+      page : 1,
+      limit,
+      orderType : value,
+      order
+    }
+    setTimeout(async() => {
+      const { articleList } =await myList.getInitialProps({
+        query: { id: typeId,...params },
+      })
+      if(articleList.code != 1)  return
+      articleList.data.forEach(item => {
+        item.addTime = timefilter(item.addTime,'ymd')
+      });
+      setList(articleList.data)
+      setIsEnd(articleList.end)
+      setListLoading(false)
+    }, 500)
+  }
+   //加載下一頁
+   const pushArticleList = () => {
+    const params = {
+      typeId,
+      page:page + 1,
+      limit,
+      orderType,
+      order
+    }
+    setBtnLoading(true)
+    setTimeout(async() => {
+      const { articleList } =await myList.getInitialProps({
+        query: { id: typeId,...params },
+      })
+      if(articleList.code != 1)  return
+      articleList.data.forEach(item => {
+        item.addTime = timefilter(item.addTime,'ymd')
+      });
+      const newList = [...list, ...articleList.data]
+      setList(newList)
+      setPage(page => page + 1)
+      setBtnLoading(false)
+      setIsEnd(articleList.end)
+    }, 500)
+  }
   return (
     <div className={["next-box",defaultState.visible ? 'next-right' : ''].join(' ')}>
        <Head>
@@ -43,23 +103,37 @@ const myList = ({result,defaultState}) => {
       <Header />
       <Row className="comm-main" type="flex" justify="center">
         <Col className="comm-left" xs={24} sm={24} md={16} lg={18} xl={14}>
-           <div className="bread-div">
-              <Breadcrumb>
-                <Breadcrumb.Item>
-                  <a href="/">首页</a>
-                </Breadcrumb.Item>
-                <Breadcrumb.Item>
-                  {types[result.type - 1] || result.res.data[0].typeName}
-                </Breadcrumb.Item>
-              </Breadcrumb>
-            </div>
+          <div className="bread-div">
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <a href="/">首页</a>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                {
+                  list.length != 0  ? list[0].typeName : '生活'
+                }
+              </Breadcrumb.Item>
+            </Breadcrumb>
+          </div>
+          <Spin spinning={listLoading}>
             <List
-              header={<div className="listTitle">博客列表</div>}
+              header={
+                <div className="listTitle">             
+                  <div>博客日志</div>
+                  <div className='order-type'>
+                    <Radio.Group value={orderType} buttonStyle="solid" 
+                    onChange={(e)=>{changeListOrder(e.target.value)}}>
+                      <Radio.Button value="Time">最新 </Radio.Button>
+                      <Radio.Button value="Count">热门</Radio.Button>
+                    </Radio.Group>
+                  </div>
+                </div>
+              }
               footer={<div></div>}
               itemLayout="vertical"
               dataSource={list}   // 数据源
               renderItem={item => (
-                <LazyLoad height={200} offset={-200} >
+                <LazyLoad height={200} offset={150} >
                   <List.Item className="listItem"
                   onClick={()=>Router.push(`/detailed?id=${item.id}`)}>
                     <div className="listItem-img">
@@ -88,6 +162,16 @@ const myList = ({result,defaultState}) => {
                 </LazyLoad>
               )}
             />
+            <LazyLoad height={200} offset={150} >
+              {
+                isEnd ? <Divider style={{color:'#1890ff'}}>没有更多了....</Divider> 
+                : <Button type="primary" onClick={pushArticleList} loading={btnLoading} 
+                    style={{margin:'0 auto',display:'block'}}>
+                    加载更多日志
+                  </Button>
+              }
+            </LazyLoad>
+          </Spin>
         </Col>
         <Col className="comm-right" xs={0} sm={0} md={7} lg={5} xl={4}>
           <Author />
@@ -100,12 +184,19 @@ const myList = ({result,defaultState}) => {
 }
 
 myList.getInitialProps = async(context) =>{
-  const {data:res} = await api.getListByType(context.query.id)
+
+  const params = {
+    typeId: context.query.id,
+    page:context.query.page || 1,
+    limit:context.query.limit || 5,
+    orderType: context.query.orderType || 'Time',
+    order:context.query.order || 'DESC'
+  }
+  const { data: res } = await apis.getArticleList(params)
   res.data.forEach(item => {
     item.addTime = timefilter(item.addTime,'ymd')
   });
-  const result = { res,type:context.query.id }
-  return {result}
+  return ({articleList : res,typeId : context.query.id})
 }
 export default connect(
   state => ({

@@ -28,7 +28,7 @@ const Author = (props) => {
     Router.push(`/list?id=${e.key}`)
   }
   useEffect(() => {
-    var str = "天生我材必有用，千金散尽还复来。"
+    var str = "每天都要进步"
     var i = 0;
     var divTyping = document.getElementById('introduction')
     const timeNull = {}
@@ -66,7 +66,7 @@ const Author = (props) => {
         </div>
         <div className="author-introduction">
           <div id='introduction' style={{ color: 'deeppink', fontWeight: 'bold' }}>
-            天生我材必有用，千金散尽还复来。
+          每天都要进步
           </div>
           {
             props.defaultState && props.defaultState.listType && props.defaultState.visible ?

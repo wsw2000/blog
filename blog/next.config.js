@@ -23,6 +23,6 @@ module.exports = withLess(
       javascriptEnabled: true,
       modifyVars: themeVariables,
       localIdentName: "[local]___[hash:base64:5]"
-    }
-  })
+    },
+  }),
 );

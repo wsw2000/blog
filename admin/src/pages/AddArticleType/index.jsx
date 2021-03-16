@@ -31,7 +31,7 @@ function AddArticleType(props) {
       props.history.push('/login')
       return
     }
-    setTypeList(res.data)
+    setTypeList([...res.typedatas,...res.musicUrl])
   }
   const delType = async(id) => {
     Modal.confirm({

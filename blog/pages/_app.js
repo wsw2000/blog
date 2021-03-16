@@ -222,8 +222,8 @@ export default class MyApp extends App {
   }
   componentWillUnmount() {
     // 注销解绑事件
-    document.documentElement.removeEventListener('click', fnTextPopup, false)
-    document.documentElement.removeEventListener('click', redraw, false)
+    // document.documentElement.removeEventListener('click', fnTextPopup, false)
+    // document.documentElement.removeEventListener('click', redraw, false)
     
   }
   render() {

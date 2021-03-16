@@ -13,6 +13,7 @@ import {
   Button,
   message,
   Modal,
+  Divider
 } from "antd";
 const { TextArea } = Input;
 import Header from "../components/Header";
@@ -236,6 +237,11 @@ const Detailed = ({ list, defaultState }) => {
                   <Icon type="fire" /> {acticleList.view_count || 0}
                 </span>
               </div>
+              <div className="detailed-content">
+                {
+                  acticleList.isShow ? <img style={{margin:'0 auto'}} src={acticleList.imgUrl} alt=""/> : null
+                }
+              </div>
               <div
                 className="detailed-content"
                 dangerouslySetInnerHTML={{ __html: html }}
@@ -291,7 +297,7 @@ const Detailed = ({ list, defaultState }) => {
                   )}
                   <TextArea
                     rows={6}
-                    placeholder="您的留言"
+                    placeholder="大哥大姐,请文明发言哦"
                     value={content}
                     onChange={(e) => {
                       setPublishInfo(e.target.value, "content");
@@ -306,7 +312,7 @@ const Detailed = ({ list, defaultState }) => {
                   </Button>
                 </div>
                 <div className="detailed-comments-title">评论列表</div>
-                {acticleList.comments_list ? (
+                {acticleList.comments_list.length != 0 ? (
                   acticleList.comments_list.map((item) => {
                     return (
                       <div className="commentsItem" key={item.id}>
@@ -405,7 +411,7 @@ const Detailed = ({ list, defaultState }) => {
                     );
                   })
                 ) : (
-                  <div>暂无评论</div>
+                  <Divider style={{color:'#1890ff',fontSize:'1.2rem'}}>暂无评论</Divider> 
                 )}
               </div>
             </div>
@@ -470,7 +476,7 @@ const Detailed = ({ list, defaultState }) => {
                   )}
                   <TextArea
                     rows={6}
-                    placeholder="您的留言"
+                    placeholder="大哥大姐,请文明发言哦"
                     value={content}
                     onChange={(e) => {
                       setPublishInfo(e.target.value, "content");

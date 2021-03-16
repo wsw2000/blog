@@ -22,12 +22,23 @@ const Header = (props) => {
   const [weatherInfo, setWeatherInfo] = useState(null)
   useEffect(async () => {
     const { data: res } = await api.getActicleType()
-    setlistType(res.data)
+    if(res.code == 1 ) {
+      setlistType(res.typedatas)
+      props.changeVisible({flag:false,listType : res.typedatas || []})
+      localStorage.setItem('listType',JSON.stringify(res.typedatas || []))
+    }else {
+      let listType = JSON.parse((localStorage.getItem('listType'))) || []
+      setlistType(listType)
+      props.changeVisible({flag:false,listType : listType || []})
+      localStorage.setItem('listType',JSON.stringify(listType || []))
+    }
     return () => {
-      // setVisible(false)
       setlistType([])
     }
   }, [])
+  useEffect(() => {
+    props.changeVisible({flag:false,listType : listType || []}) 
+  },[listType])
   //跳转到列表页
   const handleClick = (e) => {
     if (e.key == 0) {
@@ -39,6 +50,7 @@ const Header = (props) => {
       return
     }
     Router.push(`/list?id=${e.key}`)
+
   }
   const handleMenu = () => {
     setMenuFlag((menuFlag) => {
@@ -47,7 +59,7 @@ const Header = (props) => {
     props.changeVisible({flag:true,listType})
   }
   const hideVisible = () => {
-    props.changeVisible({flag:false,listType:[]})
+    props.changeVisible({flag:false,listType})
   }
 
   const getIpWeatherInfo = () => {
@@ -63,27 +75,9 @@ const Header = (props) => {
       }))
       setIpLong({ adlng, adlat })
       const weatherInfo = await api.getWeather(adlng, adlat)
-      // console.log('getWeather',weatherInfo);
       if (weatherInfo.status !== 200 && weatherInfo.data) return
       setWeatherInfo(weatherInfo.data)
     })
-  }
-  const changeTheme = () => {
-    try {
-      loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.17/darkreader.min.js', () => {
-        const proxyFetch = (url) => {
-          return fetch('https://cors-anywhere.herokuapp.com/' + url);
-        }
-        DarkReader.setFetchMethod(proxyFetch);
-          if (localStorage.getItem('themeType')) {
-            setTheme((localStorage.getItem('themeType')) * 1)
-          } else {
-            setTheme(1)
-          }    
-      })
-    } catch (error) {
-      
-    }
   }
   //检测是否滚动
   const scrollMove = () => {
@@ -97,7 +91,7 @@ const Header = (props) => {
   // 支持暗黑主题 + 获取ip信息 + 天气信息
   useEffect(() => {
     getIpWeatherInfo()
-    changeTheme()
+    changeTheme()  //从缓存拿颜色主题
     window.addEventListener('scroll', scrollMove)
   }, [])
   //主题变化而更新
@@ -127,6 +121,23 @@ const Header = (props) => {
     props.changeThemeType(theme)   //缓存
   }, [theme])
 
+  const changeTheme = () => {
+    try {
+      loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.17/darkreader.min.js', () => {
+        const proxyFetch = (url) => {
+          return fetch('https://cors-anywhere.herokuapp.com/' + url);
+        }
+        DarkReader.setFetchMethod(proxyFetch);
+          if (localStorage.getItem('themeType')) {
+            setTheme((localStorage.getItem('themeType')) * 1)
+          } else {
+            setTheme(1)
+          }    
+      })
+    } catch (error) {
+      
+    }
+  }
   const switchTheme = () => { 
     if (theme == 3) {
       setTheme(1)

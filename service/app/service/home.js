@@ -2,7 +2,7 @@
 const Service = require('egg').Service;
 class HomeService extends Service {
   async getActicleById(id) {
-    const sql = `SELECT article.id as id,article.title as title,article.imgUrl as imgUrl,article.introduce as introduce,article.content as content,article.addTime as addTime,article.view_count as view_count ,type.typeName as typeName, type.id as typeid FROM article LEFT JOIN type ON article.type_id = type.id WHERE article.id=${id}`;
+    const sql = `SELECT article.id as id,article.title as title,article.isShow as isShow,article.imgUrl as imgUrl,article.introduce as introduce,article.content as content,article.addTime as addTime,article.view_count as view_count ,type.typeName as typeName, type.id as typeid FROM article LEFT JOIN type ON article.type_id = type.id WHERE article.id=${id}`;
     const result = await this.app.mysql.query(sql);
     const comments_sql = `SELECT id,comment_id,is_reply,article_id,iconUrl, unamed, email, content,addTime,address,to_unamed from guestbook WHERE article_id = ${id}`;
     const comments = await this.app.mysql.query(comments_sql); // 总评论

@@ -1,7 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-
+const querystring = require('querystring')
 class HomeController extends Controller {
   async checkLogin() {
     const userName = this.ctx.request.body.userName;
@@ -29,10 +29,16 @@ class HomeController extends Controller {
   }
   // 总的文章列表
   async getArticleList() {
-    // "FROM_UNIXTIME(article.addTime,'%Y-%m-%d %H:%i:%s') as addTime,"+
+    const queryObj = this.ctx.query
+    const responseObj = { end: false,code:1 };  //判断是否最尾页
+    let typeStr =queryObj.typeId == 0 ? '' : `WHERE article.type_id=${queryObj.typeId} `;  
+    const orderTypeStr = queryObj.orderType === 'Time' ? 'article.addTime' : 'article.view_count';
+    //latest为根据时间排序 否则根据浏览量  DESC从大到小排序   ASC 表示按正序排序(即:从小到大排序)
+    const order = queryObj.order === 'DESC' ? 'DESC' : 'ASC'
     const sql = `SELECT article.id as id,
     article.title as title,
     article.imgUrl as imgUrl,
+    article.isShow as isShow,
     article.introduce as introduce,
     article.content as content,
     article.addTime as addTime,
@@ -40,12 +46,28 @@ class HomeController extends Controller {
     type.typeName as typeName, 
     type.id as typeid 
     FROM article LEFT JOIN type ON article.type_id = type.id`;
-    const sql1 = 'select * from article';
-    const results = await this.app.mysql.query(sql);
-    this.ctx.body = {
-      data: results,
-      code: 0,
-    };
+    const sql_ceshi =
+    'SELECT article.id as id,' +
+    'article.title as title,' +
+    'article.introduce as introduce,' +
+    "article.addTime as addTime," +
+    'article.view_count as view_count,' +
+    'article.content as content,' +
+    'article.imgUrl as imgUrl,' +
+    'article.isShow as isShow,' +
+    'type.typeName as typeName ' +
+    'FROM article LEFT JOIN type on article.type_id = type.id ' +
+    typeStr + `order by ${orderTypeStr} ${order} limit ${
+      (queryObj.page - 1) * queryObj.limit
+    }` + ',' + queryObj.limit;   
+    // limit5，5，第一个5是起始位置，第二个5是取5行，也就是从第5个开始取，往后取5个，
+    console.log(sql_ceshi);
+    const results = await this.app.mysql.query(sql_ceshi);
+    responseObj.data = results;
+    if (results.length !== parseInt(queryObj.limit)) {  //获取到的数据长度不等于limit，则是最后一页
+      responseObj.end = true;
+    }
+    this.ctx.body = responseObj;
   }
   // 添加评论
   async publishComment() {
@@ -78,7 +100,11 @@ class HomeController extends Controller {
   // 文章分类
   async getActicleType() {
     const data = await this.app.mysql.select('type');
-    this.ctx.body = { data };
+    this.ctx.body = { 
+      code: 1,
+      typedatas: data.filter(item => item.id != -1),
+      musicUrl : data.filter(item => item.id == -1),
+     };
   }
   // 根据文章分类id查询
   async getListByType() {

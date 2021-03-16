@@ -3,6 +3,8 @@ import Aplayer from 'aplayer'
 import Axios from 'axios';
 import 'aplayer/dist/APlayer.min.css';
 import './index.less';
+import  api from '../../utils/request';
+
 export default function MyAplayer() {
 
   const fetch163Playlist = (playlistId) => {
@@ -63,8 +65,10 @@ export default function MyAplayer() {
     });
   }
 
-  useEffect(() => {
-    fetch163Playlist(2416836474).then((data) => {
+  useEffect(async() => {
+    const { data: res } = await api.getActicleType()
+    if(res.code != 1) return
+    fetch163Playlist(res.musicUrl[0].typeName).then((data) => {
       const ap = new Aplayer({
         container: document.getElementById('player'),
         mini: true,

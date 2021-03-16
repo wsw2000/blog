@@ -14,6 +14,7 @@ module.exports = app => {
   router.get('/admin/delArticle/:id', adminauth, controller.admin.main.delArticle);
   router.get('/admin/delArticleType/:id', adminauth, controller.admin.main.delArticleType);
   router.get('/admin/getArticleById/:id', adminauth, controller.admin.main.getArticleById);
+  router.get('/admin/getListByType/:id', controller.admin.main.getListByType);
   router.post('/admin/saveAvatar', controller.admin.main.saveAvatar);
   
 }
