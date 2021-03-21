@@ -147,14 +147,16 @@ class MainController extends Controller {
   // 保存头像/封面
   async saveAvatar() {
     const { ctx } = this;
-    const parts = ctx.multipart({ autoFields: true });
+    // 解析表单数据的方法
+    const parts = ctx.multipart({ autoFields: true });  // 获取同时上传的多个文件，
     let files = {};
     let stream;
-    while ((stream = await parts()) != null) {
+    while ((stream = await parts()) != null) {  //// 获取文件的信息 != null
+      //stream.filename 上传图片的名字
       if (!stream.filename) {
         break;
       }
-      const fieldname = stream.fieldname; // file表单的名字
+      const fieldname = stream.fieldname; // file表单上传图片的名字
       // 上传图片的目录
       const dir = await this.service.tools.getUploadFile(stream.filename);
       const target = dir.uploadDir;
@@ -162,11 +164,11 @@ class MainController extends Controller {
 
       await pump(stream, writeStream);
 
-      files = Object.assign(files, {
-        [fieldname]: dir.saveDir,
+      files = Object.assign(files, {  //复制对象
+        [fieldname]: dir.saveDir, // avatar: "http://localhost:7001/public/...."
       });
     }
-
+    //Object.keys(files)返回对象中每一项key的数组
     if (Object.keys(files).length > 0) {
       ctx.body = {
         code: 200,

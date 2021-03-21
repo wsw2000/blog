@@ -9,13 +9,16 @@ import { Row, Col, Input, Select, Button, DatePicker,message ,Upload,Switch } fr
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import apis from '../../utils/request'
 import { timeFilter,getBase64,beforeUpload } from '../../utils/index.js'
+
+import BraftEditor from 'braft-editor'
+import 'braft-editor/dist/index.css'
 const { Option } = Select;
 const { TextArea } = Input
 function AddArticle(props) {
   const [articleId, setArticleId] = useFetchState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [articleTitle, setArticleTitle] = useFetchState('')   //文章标题
-  const [articleContent, setArticleContent] = useFetchState('')  //markdown的编辑内容
-  const [markdownContent, setMarkdownContent] = useFetchState('预览内容') //html内容
+  // const [articleContent, setArticleContent] = useFetchState('')  //markdown的编辑内容
+  // const [markdownContent, setMarkdownContent] = useFetchState('预览内容') //html内容
   const [introducemd, setIntroducemd] = useFetchState()            //简介的markdown内容
   const [introducehtml, setIntroducehtml] = useFetchState('等待编辑') //简介的html内容
   const [showDate, setShowDate] = useFetchState('2000-01-25')   //发布日期
@@ -25,16 +28,20 @@ function AddArticle(props) {
   const [loading, setLoading] = useFetchState(false);
   const [imgUrl, setImgUrl] = useFetchState('');
   const [isShow,setIsShow] = useFetchState(false);   //页面是否展示主图
+  
+  const [editorState,setEditorState] = useFetchState(BraftEditor.createEditorState(null))
 
+  
   //根据id获取文章详情
   const getArticleById = async(id) =>{
     const {data:res} = await apis.getArticleById(id)
     if(res.code !== 1) return
     setArticleTitle(res.data[0].title)
-    setArticleContent(res.data[0].content)
+    // setArticleContent(res.data[0].content)
+    setEditorState(BraftEditor.createEditorState(res.data[0].content) )
     setIntroducemd(res.data[0].introduce)
     let html=marked(res.data[0].content)
-    setMarkdownContent(html)
+    // setMarkdownContent(html)
     
     let tmpInt = marked(res.data[0].introduce)
     setIntroducehtml(tmpInt)
@@ -78,13 +85,17 @@ function AddArticle(props) {
     highlight: function (code) {
       // 高亮显示规则
       return hljs.highlightAuto(code).value;
-    },
-  }); 
-  const changeContent = (e)=>{
-    setArticleContent(e.target.value)  //markdown的编辑内容
-    let html = marked(e.target.value) 
-    // console.log(html);
-    setMarkdownContent(html) //预览html内容
+    }
+  })
+
+  // const changeContent = (e)=>{
+  //   setArticleContent(e.target.value)  //markdown的编辑内容
+  //   let html = marked(e.target.value) 
+  //   setMarkdownContent(html) //预览html内容
+  // }
+  const handleEditorChange = (editorState) => {
+    setEditorState(editorState)
+    // setOutputHTML(editorState.toHTML())
   }
 
   const changeIntroduce = (e)=>{
@@ -100,7 +111,7 @@ function AddArticle(props) {
     }else if(!articleTitle){
         message.error('文章标题不能为空')
         return false
-    }else if(!articleContent){
+    }else if(!editorState.toHTML()){
         message.error('文章内容不能为空')
         return false
     }else if(!introducemd){
@@ -110,11 +121,10 @@ function AddArticle(props) {
         message.error('发布日期不能为空')
         return false
     }
-    // let datetext= showDate.replace('-','/') //把字符串转换成时间戳
     const addArticle = {
       type_id:selectedType,
       title:articleTitle,
-      content:articleContent,
+      content:editorState.toHTML(),
       introduce:introducemd,
       imgUrl:imgUrl,
       addTime:(new Date(showDate).valueOf()),
@@ -132,7 +142,6 @@ function AddArticle(props) {
       res.isScuccess === true ? message.success('更新成功') : message.error('更新失败')
     }
   } 
-  const dateFormat = 'YYYY-MM-DD';
   const  handleChange = info => {
     console.log(info);
     if (info.file.status === 'uploading' ) {
@@ -181,22 +190,23 @@ function AddArticle(props) {
           </Row>
           <br />
           <Row gutter={10} >
-            <Col span={12}>
-            <TextArea
-              value={articleContent} 
-              className="markdown-content" 
-              rows={35}  
-              onChange={changeContent} 
-              onPressEnter={changeContent}
-              placeholder="文章内容"
-            />
+            <Col span={24}>
+              <BraftEditor
+                className="markdown-content" 
+                value={editorState}
+                onChange={handleEditorChange}
+                onSave={handleEditorChange}
+              />
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
               <div
                 className="show-html"
                 dangerouslySetInnerHTML = {{__html:markdownContent}} >
               </div>
-            </Col>
+              //  <div className="show-html">
+              //   {outputHTML}
+              // </div>
+            </Col> */}
           </Row>
         </Col>
         <Col span={6}>
@@ -219,7 +229,7 @@ function AddArticle(props) {
             <Col span={24}>
               <div className="date-select">
                 <DatePicker
-                  value={moment(showDate, dateFormat)}
+                  value={moment(showDate, 'YYYY-MM-DD')}
                   onChange={(date,dateString)=>{
                     setShowDate(dateString)   //2021-03-03
                   }}

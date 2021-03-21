@@ -1,6 +1,7 @@
 .markdown-content{
   font-size:16px !important;
   max-height: 745px;
+  border: 1px solid #283646;
 }
 .show-html{
   padding:10px;
@@ -112,7 +113,7 @@ pre >code{
   color:#FFF;
 }
 code {
-  display: inline-block ;
+  /* display: inline-block ; */
   background-color:#f3f3f3;
   border:1px solid #fdb9cc;
   border-radius:3px;

@@ -35,7 +35,7 @@ const Home = ({defaultState}) => {
   }); 
 
   // const [mylist,setMyList] = useState(list.data)
-  const [headTitle, setHeadTitle] = useState('首页 | 吴朝温 | 前端学习笔记 | 吴绍温个人博客')
+  const [headTitle, setHeadTitle] = useState('吴绍温个人博客 | 前端学习笔记')
 
   Router.events.on('routeChangeStart',(...args)=>{
     if(args[0] == "/index") return
@@ -44,7 +44,7 @@ const Home = ({defaultState}) => {
     document.addEventListener('visibilitychange',function(){
       var isHidden = document.hidden;
       isHidden && setHeadTitle('呜呜呜~~你离开了我')
-      !isHidden && setHeadTitle('首页 | 吴朝温 | 前端学习笔记 | 吴绍温个人博客')
+      !isHidden && setHeadTitle('吴绍温个人博客 | 前端学习笔记')
     })
   }
   useEffect(() => { 

@@ -1,8 +1,10 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import dynamic from 'next/dynamic'
+import Head from 'next/head';
 import {BackTop } from 'antd';
+// import POWERMODE from '../../utils/activate-power-mode';
 const Aplayer = dynamic(import('../myAplayer'), { ssr: false })
-//当模块包含仅在浏览器中工作的库时
+
 
 export default function Layout(props) {
   return (
