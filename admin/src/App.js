@@ -8,11 +8,11 @@ function App() {
   return (
     
     <Switch>
-      <Route path='/login' exact component={Login}/>
+      <Route path='/login' component={Login}/>
+      <Route path="/" exact component={AdminIndex} />
       <Route path="/home"  component={AdminIndex} />
-      <Route path="/"  component={AdminIndex} />
-      {/* <Redirect to="/home"/> */}
-      <Route path="*" component={Other}></Route>
+
+      <Route component={Other}/>
       
     </Switch>
   );

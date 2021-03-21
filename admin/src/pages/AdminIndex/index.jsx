@@ -10,6 +10,7 @@ import articleWord from '../ArticleWord'
 import menuList from '../../utils/menu'
 import apis from '../../utils/request'
 import Particles from 'react-particles-js';
+import Other from '../Other'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -116,8 +117,9 @@ function AdminIndex(props){
             <Route path="/home/addType/" exact  component={AddArticleType} />  
             <Route path="/home/add/" exact  component={AddArticle} />  
             <Route path="/home/add/:id" exact component={AddArticle} />  
-            <Route path="/home/list"  component={ArticleList} />
-            <Route path="/home/word"  component={articleWord} />  
+            <Route path="/home/list" exact  component={ArticleList} />
+            <Route path="/home/word" exact  component={articleWord} />
+            {/* <Route exact component={Other}/> */}
             {/* <Redirect to="/home/word"/> */}
           </div>
         </Content>
