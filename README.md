@@ -20,7 +20,7 @@
   [后台管理系统](http://www.wsw2000.top:3000)  
 
   管理系统用到了react hooks 跟antd组件库，echarts，目前还未完善到博主想要的功能，后续会用vue + typescript来重构
-    ![输入图片说明](https://images.gitee.com/uploads/images/2021/0324/163939_b08f2413_7436769.png "admin.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2021/0325/105623_7f501e82_7436769.png "admin.png")
     ![输入图片说明](https://images.gitee.com/uploads/images/2021/0312/153112_651512a6_7436769.png "admin1.png")
 #### 安装教程
 1.  yarn
