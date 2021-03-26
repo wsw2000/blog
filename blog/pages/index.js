@@ -67,43 +67,6 @@ const Home = ({defaultState}) => {
       <Row className="comm-main" type="flex" justify="center">
         <Col className="comm-left" xs={24} sm={24} md={16} lg={18} xl={14}>
           <ArticleList typeId={0} />
-          {/* <List
-            header={<div className="listTitle">             
-              博客列表</div>}
-            footer={<div></div>}
-            itemLayout="vertical"
-            dataSource={mylist}   // 数据源
-            renderItem={item => (
-              <LazyLoad height={200} offset={-200} >
-                <List.Item 
-                  className="listItem cssnice"
-                  onClick={()=>Router.push(`/detailed?id=${item.id}`)}>
-                    <div className="listItem-img">
-                      <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
-                    </div>
-                    <div className="listItem-content">
-                      <div className="listItem-content-title">
-                        <Tag color="geekblue">{item.typeName}</Tag>
-                        <Link href={{pathname:'/detailed',query:{id:item.id}}}>
-                          <a>{item.title}</a>
-                        </Link> 
-                      </div>
-                      <div className="listItem-content-introduce">
-                        <span>{item.introduce}</span>
-                      </div>
-                      <div className="listItem-content-footer">
-                        <div>
-                          <Icon type="fire" /><span>{item.view_count || 0}</span>
-                        </div>
-                        <div>
-                          <Icon type="calendar" /><span>{item.addTime}</span>
-                        </div>
-                      </div>
-                    </div>
-                </List.Item>
-              </LazyLoad>
-            )}
-          /> */}
         </Col>
         <Col className="comm-right cssniceright" xs={0} sm={0} md={7} lg={5} xl={4}>
           <Author />

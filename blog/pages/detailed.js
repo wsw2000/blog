@@ -33,7 +33,7 @@ const Detailed = ({ list, defaultState }) => {
   const [avatar, setAvatar] = useState("");
   const [unamed, setUnamed] = useState("");
   const [email, setEmail] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState("");  //回复内容
   const [toUnamed, setToUnamed] = useState("");
   const [isReply, setIsReply] = useState(0); //回复id 默认为0
   const [commentId, setCommentId] = useState(0); //评论id 默认为0

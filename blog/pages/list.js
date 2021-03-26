@@ -34,9 +34,9 @@ const myList = ({articleList,typeId,defaultState}) => {
   }
   useEffect(()=>{
     setList(articleList.data)
-    setPage(1)
-    setOrderType('Time')
-    setIsEnd(articleList.end)
+    setPage(1)  //默认第一页
+    setOrderType('Time')  //默认时间排序
+    setIsEnd(articleList.end) //是否最后一页
   },[typeId])   //监听typeId时
   useEffect(() => { 
     checkTitle()

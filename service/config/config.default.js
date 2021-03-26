@@ -44,9 +44,10 @@ module.exports = appInfo => {
     csrf: {
       enable: false
     },
-    domainWhiteList: ['http://localhost:3000','http://127.0.0.1:7001','http://localhost:9000','http://127.0.0.1:3000',
-    'http://127.0.0.1:9000','http://120.78.195.82:3000','http://120.78.195.82',
-    'http://www.wsw2000.top:3000','http://www.wsw2000.top','http://192.168.1.58:9000/']
+    domainWhiteList: [
+    'http://localhost:3000','http://127.0.0.1:7001','http://localhost:9000','http://127.0.0.1:3000',
+    'http://127.0.0.1:9000'
+    ]
   };
   config.cors = {
     // origin: ['http://localhost:3000','http://localhost:9001'],   //允许什么域名

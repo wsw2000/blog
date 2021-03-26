@@ -1,9 +1,10 @@
 import moment from 'moment';
 import {Spin} from 'antd';
+import { Icon } from 'antd';
 const WeatherContent = (props) => {
   const {weatherInfo,ipLong,ipWeather} = props
   return (
-    <div id="weather-content">
+    <div id="weather-content" style={{textAlign:'center'}}>
     {
       weatherInfo && weatherInfo.now && ipWeather.city &&
       <>
@@ -30,14 +31,14 @@ const WeatherContent = (props) => {
           </div>
 
           <div className="weather-content-right">
-            <img src={`http://cdn.blogleeee.com/custom${weatherInfo.now.icon}.png`} />
+            <img src={`https://www.wsw2000.top/images/weatherIcon/${weatherInfo.now.icon}.png`} />
           </div>
         </div>
 
         {
-          weatherInfo.warning[0] &&
+          weatherInfo.warning && weatherInfo.warning[0] &&
           <div className="warning-box">
-            <WarningOutlined style={{ marginRight: 10, color: '#ff4d4f', fontSize: 18 }} />
+            <Icon type="info-circle" theme="twoTone" twoToneColor="#eb2f96" style={{ marginRight: 10, color: '#ff4d4f', fontSize: 30 }} />
             <div className="warning">{weatherInfo.warning[0].text}</div>
           </div>
         }
@@ -87,7 +88,7 @@ const WeatherContent = (props) => {
               {
                 weatherInfo.hourly.slice(0, 7).map((item, index) => (
                   <li className="item" key={index}>
-                    <img src={`http://cdn.blogleeee.com/${item.icon}.png`} />
+                    <img src={`https://www.wsw2000.top/images/weatherIcon/${item.icon}.png`} />
                     <div className="temp">{item.temp}</div>
                     <div className="time">{moment(item.fxTime).format('HH')}时</div>
                   </li>
@@ -102,7 +103,7 @@ const WeatherContent = (props) => {
               {
                 weatherInfo.daily.map((item, index) => (
                   <li className="item" key={index}>
-                    <img src={`http://cdn.blogleeee.com/${item.iconDay}.png`} />
+                    <img src={`https://www.wsw2000.top/images/weatherIcon/${item.iconDay}.png`} />
                     <div className="temp">{item.tempMax}</div>
                     <div className="time">{moment(item.fxDate).format('dddd')}</div>
                   </li>

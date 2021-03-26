@@ -22,8 +22,7 @@ export default class Tocify {
     this.tocItems = [];
     this.index = 0;
   }
-
-  add(text: string, level: number) {
+  add(text: string, level: number) { 
     const anchor = `toc${level}${++this.index}`;
     const item = { anchor, level, text };
     const items = this.tocItems;

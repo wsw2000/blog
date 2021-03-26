@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "egg": "^2.15.1",
+    "egg-cluster": "^1.26.0",
     "egg-cors": "^2.2.3",
     "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.11.0",
@@ -27,7 +28,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-service",
+    "start": "egg-scripts start --daemon --title=egg-server-service --prot=443",
     "stop": "egg-scripts stop --title=egg-server-service",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",

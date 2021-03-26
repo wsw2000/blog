@@ -131,7 +131,7 @@ const Header = (props) => {
           if (localStorage.getItem('themeType')) {
             setTheme((localStorage.getItem('themeType')) * 1)
           } else {
-            setTheme(1)
+            setTheme(3)  //默认暗黑
           }    
       })
     } catch (error) {
@@ -157,7 +157,7 @@ const Header = (props) => {
   return (
     <>
     {/* {xs< 576px sm≥ 576px md≥ 768px lg≥ 992px xl ≥ 1200px xxl≥ 1600px } */}
-      <div className={["header",props.defaultState.isFixed ? 'header-fixed' : ''].join(' ')}>
+      <div className={["header",props.defaultState.isFixed ? 'header-fixed' :''].join(' ')}>
         <Row type="flex" justify="center">
           <Col xs={18} sm={8} md={6} lg={4} xl={6}>
             <span className="header-logo">
@@ -165,7 +165,7 @@ const Header = (props) => {
                 <a> Wsw</a>
               </Link>
             </span>
-            <span className="header-title">学习前端的记录站</span>
+            <span className="header-title">前端学习记录站</span>
           </Col>
           <Col xs={0} sm={10} md={6} lg={6} xl={6}>
             {
@@ -173,7 +173,7 @@ const Header = (props) => {
               <span className="header-weather">
                 <Popover placement="bottom" 
                 content={<WeatherContent weatherInfo={weatherInfo} ipWeather={ipWeather} ipLong={ipLong}/>} 
-                trigger="hover">
+                trigger="hover" mouseLeaveDelay={1.1}>
                   <div className='weather-title-box'>
                     {
                       weatherInfo && weatherInfo.now &&
@@ -182,7 +182,7 @@ const Header = (props) => {
                     {
                       weatherInfo && weatherInfo.now &&
                       <>
-                        <img style={{ width: 20, height: 20, marginRight: 5 }} src={`http://cdn.blogleeee.com/custom${weatherInfo.now.icon}.png`} />
+                        <img style={{ width: 30, height: 30, marginRight: 5 }} src={`https://www.wsw2000.top/images/weatherIcon/${weatherInfo.now.icon}.png`} />
                         <span className="wearther-span">{weatherInfo.now.text}</span>
                         <span className="wearther-span">{weatherInfo.now.temp}℃</span>
                       </>

@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import useFetchState  from '../../utils/useFetchState'
 import marked from 'marked'
-import hljs from "highlight.js";
+// import hljs from "highlight.js";
+// import "highlight.js/styles/monokai-sublime.css";  // highlight颜色
 import moment from 'moment'
-import "highlight.js/styles/monokai-sublime.css";  // highlight颜色
 import './index.css'
 import { Row, Col, Input, Select, Button, DatePicker,message ,Upload,Switch } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import apis from '../../utils/request'
 import { timeFilter,getBase64,beforeUpload } from '../../utils/index.js'
 
-import BraftEditor from 'braft-editor'
-import 'braft-editor/dist/index.css'
+import Vditor from "vditor"
+import "vditor/dist/index.css"
+
 const { Option } = Select;
 const { TextArea } = Input
 function AddArticle(props) {
@@ -29,7 +30,10 @@ function AddArticle(props) {
   const [imgUrl, setImgUrl] = useFetchState('');
   const [isShow,setIsShow] = useFetchState(false);   //页面是否展示主图
   
-  const [editorState,setEditorState] = useFetchState(BraftEditor.createEditorState(null))
+  const [editValue,setEditValue] = useFetchState('')
+  const [vditor,setVditor] = useFetchState(null)
+
+
 
   
   //根据id获取文章详情
@@ -38,7 +42,7 @@ function AddArticle(props) {
     if(res.code !== 1) return
     setArticleTitle(res.data[0].title)
     // setArticleContent(res.data[0].content)
-    setEditorState(BraftEditor.createEditorState(res.data[0].content) )
+    // setEditorState(BraftEditor.createEditorState(res.data[0].content) )
     setIntroducemd(res.data[0].introduce)
     let html=marked(res.data[0].content)
     // setMarkdownContent(html)
@@ -46,7 +50,6 @@ function AddArticle(props) {
     let tmpInt = marked(res.data[0].introduce)
     setIntroducehtml(tmpInt)
     setShowDate( timeFilter(res.data[0].addTime) )
-    console.log(res.data[0]);
     setSelectType(res.data[0].typeid)
     setImgUrl(res.data[0].imgUrl)
     setIsShow(res.data[0].isShow)
@@ -56,7 +59,6 @@ function AddArticle(props) {
       //文章类别 + 路由守卫
     const getTypeInfo = async() =>{
       const {data:res} = await apis.getTypeInfo()
-      console.log(res);
       if(res.data === '登录失败' || res.code != 1){
         localStorage.removeItem('openId')
         props.history.push('/login')  
@@ -72,6 +74,8 @@ function AddArticle(props) {
       setArticleId(tmpId)
       getArticleById(tmpId)
     } 
+    //组件挂载完成之后调用 注意一定要在组件挂载完成之后调用 否则会找不到注入的DOM
+    createVidtor({ value: editValue });
   },[])
   marked.setOptions({
     renderer:new marked.Renderer(),
@@ -84,26 +88,112 @@ function AddArticle(props) {
     smartypants: false,
     highlight: function (code) {
       // 高亮显示规则
-      return hljs.highlightAuto(code).value;
+      // return hljs.highlightAuto(code).value;
     }
   })
-
-  // const changeContent = (e)=>{
-  //   setArticleContent(e.target.value)  //markdown的编辑内容
-  //   let html = marked(e.target.value) 
-  //   setMarkdownContent(html) //预览html内容
-  // }
-  const handleEditorChange = (editorState) => {
-    setEditorState(editorState)
-    // setOutputHTML(editorState.toHTML())
-  }
-
+  //创建Vidtor
+  const createVidtor = params =>{
+    let { value } = params
+    value = value ? value : ''
+    const vditor = new Vditor("vditor", {
+        height: 800,
+        mode: "ir", //及时渲染模式
+        placeholder: "React Vditor",
+        icon: "material",
+        toolbar: [
+            "emoji",
+            "headings",
+            "bold",
+            "italic",
+            "strike",
+            "link",
+            "|",
+            "list",
+            "ordered-list",
+            "check",
+            "outdent",
+            "indent",
+            "|",
+            "quote",
+            "line",
+            "code",
+            "inline-code",
+            "insert-before",
+            "insert-after",
+            "|",
+            "upload",
+            "table",
+            "|",
+            "undo",
+            "redo",
+            "|",
+            "fullscreen",
+            "edit-mode",
+            {
+                name: "more",
+                toolbar: [
+                    "both",
+                    "code-theme",
+                    "content-theme",
+                    "export",
+                    "outline",
+                    "preview",
+                    "devtools",
+                    "info",
+                    "help"
+                ]
+            },
+            "|",
+            {
+                hotkey: "⌘-S",
+                name: "save",
+                tipPosition: "s",
+                tip: "保存",
+                className: "right",
+                icon: `<img style="height: 16px" src='https://img.58cdn.com.cn/escstatic/docs/imgUpload/idocs/save.svg'/>`,
+                click() {
+                  setEditValue(vditor.getValue())
+                }
+            },
+        ],
+        after() {
+            vditor.setValue(value);
+        },
+        upload: {
+            accept: 'image/*,.mp3, .wav, .rar',
+            multiple: false,
+            url: `${apis.baseURL}/saveAvatar`,
+            filename(name) {
+                return name
+                    .replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, "")
+                    .replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, "")
+                    .replace("/\\s/g", "");
+            },
+            typewriterMode: true,
+            format(files,responseText) {
+              console.log(responseText);
+              const { code,data,message } = JSON.parse(responseText)
+              return JSON.stringify({
+                message,
+                code,
+                data: {
+                  errFiles :[],
+                  succMap:{
+                    '.png':`${data['file[]']}`
+                  }
+                }
+              })            
+            }
+        }
+    });
+    setVditor(vditor)
+    return vditor;
+  } 
   const changeIntroduce = (e)=>{
     setIntroducemd(e.target.value)
     let html=marked(e.target.value)
     setIntroducehtml(html)
   }
-
   const saveArticle = async()=>{
     if(selectedType === '请选择类别'){
         message.error('必须选择文章类别')
@@ -111,9 +201,9 @@ function AddArticle(props) {
     }else if(!articleTitle){
         message.error('文章标题不能为空')
         return false
-    }else if(!editorState.toHTML()){
-        message.error('文章内容不能为空')
-        return false
+    }else if(!(vditor.getValue().trim())){
+      message.error('文章内容不能为空')
+      return false
     }else if(!introducemd){
         message.error('简介不能为空')
         return false
@@ -124,7 +214,7 @@ function AddArticle(props) {
     const addArticle = {
       type_id:selectedType,
       title:articleTitle,
-      content:editorState.toHTML(),
+      content:vditor.getValue(),
       introduce:introducemd,
       imgUrl:imgUrl,
       addTime:(new Date(showDate).valueOf()),
@@ -136,14 +226,12 @@ function AddArticle(props) {
       setArticleId(res.insertId)
       res.isScuccess === true ? message.success('发布成功') : message.error('发布失败')
     }else {
-      // console.log('articleId:'+articleId)
       addArticle.id = articleId   //更新接口需要主键id  文章id
       const {data:res} = await apis.updateArticle(addArticle)
       res.isScuccess === true ? message.success('更新成功') : message.error('更新失败')
     }
   } 
   const  handleChange = info => {
-    console.log(info);
     if (info.file.status === 'uploading' ) {
       setLoading(true)
       return;
@@ -164,6 +252,7 @@ function AddArticle(props) {
   };
   return (
     <div>
+      {/* xs={0} sm={0} md={7} lg={5} xl={4} */}
       <Row gutter={5}>
         <Col span={18}>
           <Row gutter={10} >
@@ -191,22 +280,14 @@ function AddArticle(props) {
           <br />
           <Row gutter={10} >
             <Col span={24}>
-              <BraftEditor
+              {/* <BraftEditor
                 className="markdown-content" 
                 value={editorState}
                 onChange={handleEditorChange}
                 onSave={handleEditorChange}
-              />
+              /> */}
+              <div id="vditor" />
             </Col>
-            {/* <Col span={12}>
-              <div
-                className="show-html"
-                dangerouslySetInnerHTML = {{__html:markdownContent}} >
-              </div>
-              //  <div className="show-html">
-              //   {outputHTML}
-              // </div>
-            </Col> */}
           </Row>
         </Col>
         <Col span={6}>
@@ -240,7 +321,9 @@ function AddArticle(props) {
             </Col>
             <Col span={24}>
               <br/>
-              <Button style={{width:'100%'}} type="primary" size="large" onClick={saveArticle}>发布文章</Button>
+              <Button style={{width:'100%'}} type="primary" size="large" onClick={saveArticle}>
+                {articleId == 0 ? '发布文章' : '更新文章'}
+              </Button>
             </Col>
             <Col span={24}>
               <br/>

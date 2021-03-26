@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { Layout, Menu, Breadcrumb,Button,Row,Col,Modal,message } from 'antd';
 import './index.css'
 import { PieChartOutlined, UserOutlined,FileDoneOutlined,DiffOutlined } from '@ant-design/icons'
-import { Route,Link,Redirect } from 'react-router-dom';
+import { Route,Link } from 'react-router-dom';
 import AddArticle from '../AddArticle'
 import ArticleList from '../ArticleList'
 import AddArticleType from '../AddArticleType'
@@ -10,7 +10,6 @@ import articleWord from '../ArticleWord'
 import menuList from '../../utils/menu'
 import apis from '../../utils/request'
 import Particles from 'react-particles-js';
-import Other from '../Other'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -61,7 +60,7 @@ function AdminIndex(props){
         message.success('退出成功')
 
         setTimeout(() =>{
-          props.history.push('/')
+          props.history.push('/login')
         },1000)
       },
       onCancel() {
@@ -72,21 +71,21 @@ function AdminIndex(props){
   return (
     <>
       <Particles 
-         params={{
-            		particles: {
-            			line_linked: {
-            				shadow: {
-            					enable: true,
-            					color: "#f39189",
-            					blur: 2
-            				}
-            			}
-            		}
-            	}}
-              style={{
-                width: '100%',
-                position:'absolute'
-              }}
+        params={{
+        particles: {
+          line_linked: {
+            shadow: {
+              enable: true,
+              color: "#f39189",
+              blur: 2
+            }
+          }
+        }
+        }}
+        style={{
+          width: '100%',
+          position:'absolute'
+        }}
       />
       <Layout style={{ minHeight: '100vh',minWidth: '100%' }}>
       <Sider  breakpoint="md"  collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -112,15 +111,12 @@ function AdminIndex(props){
             <Breadcrumb.Item>工作台</Breadcrumb.Item>
           </Breadcrumb>
           <div style={{ padding: 24, background: '#fff'}}>
-            
             <Route path="/home" exact  render={()=><h3>嘻嘻嘻</h3>} />  
             <Route path="/home/addType/" exact  component={AddArticleType} />  
             <Route path="/home/add/" exact  component={AddArticle} />  
             <Route path="/home/add/:id" exact component={AddArticle} />  
             <Route path="/home/list" exact  component={ArticleList} />
             <Route path="/home/word" exact  component={articleWord} />
-            {/* <Route exact component={Other}/> */}
-            {/* <Redirect to="/home/word"/> */}
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>wsw2000.top</Footer>

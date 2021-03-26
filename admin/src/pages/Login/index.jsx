@@ -3,7 +3,7 @@ import { Card, Input, Button, Spin, message } from 'antd';
 import { KeyOutlined, UserOutlined } from '@ant-design/icons'
 import './index.css'
 import apis from '../../utils/request';
-import Particles from 'react-particles-js';
+import Particles from 'react-particles-js'; //粒子背景
 
 const Login = (props) => {
   const [userName, setUserName] = useState('')
@@ -21,11 +21,11 @@ const Login = (props) => {
       passWord:passWord
     }
     const {data:res} =await apis.loginAdmin(userInfo)
-    if(res.data=='登录成功'){
+    if(res.data === '登录成功'){
       setIsLoading(false)
       localStorage.setItem('openId',res.openId)
       message.success('登录成功')
-      props.history.push('/index')
+      props.history.push('/')
     }else{
       setIsLoading(false)
       message.error('用户名密码错误')
@@ -151,7 +151,7 @@ const Login = (props) => {
       />
       <div className="login-div">
         <Spin tip="Loading..." spinning={isLoading}>
-          <Card title="JSPang Blog  System" bordered={true} style={{ width: 400 }} >
+          <Card title="Wsw Blog System" bordered={true} style={{ width: 400 }} >
             <Input
               id="userName"
               size="large"
@@ -166,6 +166,7 @@ const Login = (props) => {
               placeholder="Enter your password"
               prefix={<KeyOutlined />}
               onChange={(e) => { setPassWord(e.target.value) }}
+              onPressEnter={checkLogin}
             />
             <br /><br />
             <Button type="primary" size="large" block onClick={checkLogin} > Login in </Button>
