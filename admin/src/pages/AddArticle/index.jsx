@@ -18,12 +18,11 @@ const { TextArea } = Input
 function AddArticle(props) {
   const [articleId, setArticleId] = useFetchState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [articleTitle, setArticleTitle] = useFetchState('')   //文章标题
-  // const [articleContent, setArticleContent] = useFetchState('')  //markdown的编辑内容
-  // const [markdownContent, setMarkdownContent] = useFetchState('预览内容') //html内容
+  
   const [introducemd, setIntroducemd] = useFetchState()            //简介的markdown内容
   const [introducehtml, setIntroducehtml] = useFetchState('等待编辑') //简介的html内容
   const [showDate, setShowDate] = useFetchState('2000-01-25')   //发布日期
-  // const [updateDate, setUpdateDate] = useFetchState() //修改日志的日期
+  
   const [typeInfo, setTypeInfo] = useFetchState([]) // 文章类别信息
   const [selectedType, setSelectType] = useFetchState('请选择类别') //选择的文章类别
   const [loading, setLoading] = useFetchState(false);
@@ -41,11 +40,10 @@ function AddArticle(props) {
     const {data:res} = await apis.getArticleById(id)
     if(res.code !== 1) return
     setArticleTitle(res.data[0].title)
-    // setArticleContent(res.data[0].content)
-    // setEditorState(BraftEditor.createEditorState(res.data[0].content) )
+   
+    createVidtor({ value: res.data[0].content });  // 如果有文章id就给 vditor大佬赋值
     setIntroducemd(res.data[0].introduce)
-    let html=marked(res.data[0].content)
-    // setMarkdownContent(html)
+  
     
     let tmpInt = marked(res.data[0].introduce)
     setIntroducehtml(tmpInt)
@@ -70,9 +68,9 @@ function AddArticle(props) {
     let tmpId = props.match.params.id
     //如果有文章id  代表修改
     if(tmpId){
-      // console.log(tmpId);
       setArticleId(tmpId)
       getArticleById(tmpId)
+      return
     } 
     //组件挂载完成之后调用 注意一定要在组件挂载完成之后调用 否则会找不到注入的DOM
     createVidtor({ value: editValue });

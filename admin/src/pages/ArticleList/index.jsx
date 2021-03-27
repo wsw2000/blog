@@ -62,7 +62,6 @@ function ArticleList(props) {
   }
   useEffect(()=>{
     getListByType()
-    console.log(selectedType);
   },[selectedType])
   useEffect(() => {
     setListLoading(true)

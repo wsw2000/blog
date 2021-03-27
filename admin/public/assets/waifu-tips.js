@@ -184,7 +184,7 @@ function initModel(waifuPath){
         /* 首次访问加载 指定模型 的 指定材质 */
         
         var modelId = 1;            // 模型 ID
-        var modelTexturesId = 53    // 材质 ID
+        var modelTexturesId = 69    // 材质 ID
         
     } loadModel(modelId, modelTexturesId);
 	
@@ -228,16 +228,16 @@ function initModel(waifuPath){
 
 function loadModel(modelId, modelTexturesId){
     localStorage.setItem('modelId', modelId);
-    if (modelTexturesId === undefined) modelTexturesId = 0;
+    if (modelTexturesId === undefined) modelTexturesId =3;
     localStorage.setItem('modelTexturesId', modelTexturesId);
     loadlive2d('live2d', 'https://api.fghrsh.net/live2d/get/?id='+modelId+'-'+modelTexturesId, console.log('live2d','模型 '+modelId+'-'+modelTexturesId+' 加载完成'));
 }
 
 function loadRandModel(){
-    var modelId = localStorage.getItem('modelId');
+    var modelId = localStorage.getItem('modelId') || 3;
     var modelTexturesId = localStorage.getItem('modelTexturesId');
     
-    var modelTexturesRandMode = 'rand';     // 可选 'rand'(随机), 'switch'(顺序)
+    var modelTexturesRandMode = 'switch';     // 可选 'rand'(随机), 'switch'(顺序)
     
     $.ajax({
         cache: false,
