@@ -1,0 +1,27 @@
+
+.Senbox{
+  text-align: center;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  &-img { 
+    max-height:8rem;
+    overflow: hidden;
+    border-radius: 10px;
+    img{
+      transition: all 1s;
+      width: 100%;
+    }
+  }
+  .scale{
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  &-img:hover img{
+    .scale;
+  }
+  &-title {
+
+  }
+}
+
