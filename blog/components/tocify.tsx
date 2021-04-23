@@ -1,6 +1,6 @@
 import React from 'react';
 import { Anchor } from 'antd';
-import { last } from 'lodash';
+import { last } from 'lodash'
 
 const { Link } = Anchor;
 
@@ -22,7 +22,8 @@ export default class Tocify {
     this.tocItems = [];
     this.index = 0;
   }
-  add(text: string, level: number) { 
+
+  add(text: string, level: number) {
     const anchor = `toc${level}${++this.index}`;
     const item = { anchor, level, text };
     const items = this.tocItems;
@@ -68,9 +69,9 @@ export default class Tocify {
     ));
   }
 
-  render() {
+  render(offsetTop: number) {
     return (
-      <Anchor affix showInkInFixed>
+      <Anchor affix showInkInFixed offsetTop={offsetTop}>
          {this.renderToc(this.tocItems)}
       </Anchor>
     );

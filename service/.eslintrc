@@ -1,4 +1,4 @@
 {
   "extends": "eslint-config-egg",
-  "eqeqeq":"off"
+  "arrow-parens": "off"
 }

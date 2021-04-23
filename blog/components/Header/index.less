@@ -66,12 +66,39 @@
 }
 .header-fixed {
   width: 100%;
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 999;
   background-color: rgba(#b4aee8,.8);
-  transition:all 1s ease
-//   color: #fff;
+  transition:all 1s ease;
+  animation: move 1s both;
+}
+@keyframes move{
+  0%{
+    opacity: 0;
+    transform: translate3d(-100%,0,0);
+  }
+  50%{
+    opacity: 1;
+    transform: translate3d(3%,0,0);
+  }
+  65%{
+    opacity: 1;
+    transform: translate3d(-2.5%,0,0);
+  }
+  80%{
+    opacity: 1;
+    transform: translate3d(0,0,0);
+  }
+  90%{
+    opacity: 1;
+    transform: translate3d(-1%,0,0);
+  }
+  100%{
+    opacity: 1;
+    transform: translate3d(0,0,0);
+  }
+
 }
 .menuIcon {
   height: 100%;

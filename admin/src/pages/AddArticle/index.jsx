@@ -94,7 +94,7 @@ function AddArticle(props) {
     let { value } = params
     value = value ? value : ''
     const vditor = new Vditor("vditor", {
-        height: 800,
+        height: 500,
         mode: "ir", //及时渲染模式
         placeholder: "React Vditor",
         icon: "material",

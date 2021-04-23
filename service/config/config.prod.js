@@ -33,7 +33,22 @@ module.exports = appInfo => {
     },
   };
 
-  config.uploadDir = 'app/public/upload';  //上传文件
+  config.mysql = {
+    // database configuration
+    // client: {
+    //   host: '120.78.195.82',
+    //   port: '3306',
+    //   user: 'root',
+    //   password: 'wsw666',
+    //   database: 'wsw_blog',
+    //   // 存储四字节的表情
+    //   charset: 'utf8mb4',
+    // },
+    // load into app, default is open
+    app: true,
+    // load into agent, default is close
+    agent: false,
+  };
   return {
     ...config,
     ...userConfig,

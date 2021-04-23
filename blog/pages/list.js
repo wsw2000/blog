@@ -135,8 +135,8 @@ const myList = ({articleList,typeId,defaultState}) => {
               renderItem={item => (
                 <LazyLoad height={200} offset={150} >
                   <List.Item className="listItem"
-                  onClick={()=>Router.push(`/detailed?id=${item.id}`)}>
-                    <div className="listItem-img">
+                 >
+                    <div className="listItem-img"  onClick={()=>Router.push(`/detailed?id=${item.id}`)}>
                       <Iazyimg src={item.imgUrl || 'https://tva2.sinaimg.cn/large/9bd9b167ly1fwsflokx5rj21hc0u07w2.jpg'}></Iazyimg>
                     </div>
                     <div className="listItem-content">

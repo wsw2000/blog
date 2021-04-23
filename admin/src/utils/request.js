@@ -40,8 +40,8 @@ axios.interceptors.response.use(
 )
 
 const apis = {
-  baseURL : 'http://localhost:7001/admin',
-  // baseURL : 'https://www.wsw2000.top:7001/admin',
+  // baseURL : 'http://localhost:7001/admin',
+  baseURL : 'https://www.wsw2000.top:7001/admin',
 
   loginAdmin(data){
     return new Promise((resolve,reject) =>{
