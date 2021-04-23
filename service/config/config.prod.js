@@ -1,46 +1,45 @@
 /* eslint valid-jsdoc: "off" */
 
-'use strict';
+'use strict'
 
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
-module.exports = appInfo => {
+module.exports = (appInfo) => {
   /**
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {};
-  const path = require('path');
-
+  const config = (exports = {})
+  const path = require('path')
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1613014216491_5419';
+  config.keys = appInfo.name + '_1613014216491_5419'
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = []
 
   // add your user config here
   const userConfig = {
     myAppName: 'wsw-service',
-  };
+  }
 
-   // https
+  // https
   config.cluster = {
     https: {
       key: 'ssl/private.key',
       cert: 'ssl/fullchain.crt',
     },
-  };
+  }
 
   config.mysql = {
     // database configuration
     // client: {
-    //   host: '120.78.195.82',
+    //   host: '',
     //   port: '3306',
-    //   user: 'root',
-    //   password: 'wsw666',
-    //   database: 'wsw_blog',
+    //   user: '',
+    //   password: '',
+    //   database: '',
     //   // 存储四字节的表情
     //   charset: 'utf8mb4',
     // },
@@ -48,9 +47,9 @@ module.exports = appInfo => {
     app: true,
     // load into agent, default is close
     agent: false,
-  };
+  }
   return {
     ...config,
     ...userConfig,
-  };
-};
+  }
+}

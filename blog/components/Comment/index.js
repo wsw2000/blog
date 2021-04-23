@@ -5,7 +5,7 @@ import api from '../../utils/request'
 import { Input, Avatar, Button, message, Icon, Popover } from 'antd'
 import myContext from '../createContext'
 
-import { Picker } from 'emoji-mart'
+import { Picker } from 'emoji-mart' //表情
 import 'emoji-mart/css/emoji-mart.css'
 // 表情插件汉化
 const i18n = {
@@ -164,7 +164,7 @@ const Comment = (props) => {
         setUserName('')
         setPassWord('')
       }
-    }) //向父子件传值
+    }) //向父组件传值
   }
   return (
     <>
