@@ -40,18 +40,7 @@ class HomeController extends Controller {
       queryObj.orderType === 'Time' ? 'article.addTime' : 'article.view_count'
     //latest为根据时间排序 否则根据浏览量  DESC从大到小排序   ASC 表示按正序排序(即:从小到大排序)
     const order = queryObj.order === 'DESC' ? 'DESC' : 'ASC'
-    const sql = `SELECT article.id as id,
-    article.title as title,
-    article.imgUrl as imgUrl,
-    article.isShow as isShow,
-    article.introduce as introduce,
-    article.content as content,
-    article.addTime as addTime,
-    article.view_count as view_count ,
-    type.typeName as typeName, 
-    type.id as typeid 
-    FROM article LEFT JOIN type ON article.type_id = type.id`
-    const sql_ceshi =
+    const sql =
       'SELECT article.id as id,' +
       'article.title as title,' +
       'article.introduce as introduce,' +
@@ -69,8 +58,7 @@ class HomeController extends Controller {
       ',' +
       queryObj.limit
     // limit5，5，第一个5是起始位置，第二个5是取5行，也就是从第5个开始取，往后取5个，
-    console.log(sql_ceshi)
-    const results = await this.app.mysql.query(sql_ceshi)
+    const results = await this.app.mysql.query(sql)
     responseObj.data = results
     if (results.length !== parseInt(queryObj.limit)) {
       //获取到的数据长度不等于limit，则是最后一页
@@ -82,7 +70,6 @@ class HomeController extends Controller {
   // 添加评论
   async publishComment() {
     const info = this.ctx.request.body
-    console.log('info::', info)
     //不是本人且不是回复   就发送邮箱提醒本人  有人回复or留言了
     const articles = await this.app.mysql.select('article')
     const article_name =
