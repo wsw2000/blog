@@ -51,7 +51,7 @@ const WeatherContent = (props) => {
 
             <div className='weather-content-right'>
               <img
-                src={`http://cdn.blogleeee.com/${weatherInfo.now.icon}.png`}
+                src={`https://wsw2000.top/images/weatherIcon/${weatherInfo.now.icon}.png`}
               />
             </div>
           </div>
@@ -111,7 +111,7 @@ const WeatherContent = (props) => {
               <ul className='list'>
                 {weatherInfo.hourly.slice(0, 7).map((item, index) => (
                   <li className='item' key={index}>
-                    <img src={`http://cdn.blogleeee.com/${item.icon}.png`} />
+                    <img src={`https://wsw2000.top/images/weatherIcon/${item.icon}.png`} />
                     <div className='temp'>{item.temp}</div>
                     <div className='time'>
                       {moment(item.fxTime).format('HH')}时
@@ -126,7 +126,7 @@ const WeatherContent = (props) => {
               <ul className='list'>
                 {weatherInfo.daily.map((item, index) => (
                   <li className='item' key={index}>
-                    <img src={`http://cdn.blogleeee.com/${item.iconDay}.png`} />
+                    <img src={`https://wsw2000.top/images/weatherIcon/${item.iconDay}.png`} />
                     <div className='temp'>{item.tempMax}</div>
                     <div className='time'>
                       {moment(item.fxDate).format('dddd')}

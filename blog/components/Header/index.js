@@ -209,7 +209,7 @@ const Header = (props) => {
                       <>
                         <img
                           style={{ width: 30, height: 30, marginRight: 5 }}
-                          src={`http://cdn.blogleeee.com/${weatherInfo.now.icon}.png`}
+                          src={`https://wsw2000.top/images/weatherIcon/${weatherInfo.now.icon}.png`}
                         />
                         <span className='wearther-span'>
                           {weatherInfo.now.text}

@@ -8,8 +8,8 @@ import { changeVisible } from '../../redux/action'
 import 'react-photo-view/dist/index.css'
 const Author = (props) => {
   const [photoImages, setPhotoImages] = useState([
-    'http://www.wsw2000.top/images/qq.png',
-    'http://www.wsw2000.top/images/wechat.png',
+    'https://wsw2000.top/images/qq.png',
+    'https://wsw2000.top/images/wechat.png',
   ])
   const [visible, setVisible] = useState(false)
   const [photoIndex, setPhotoIndex] = React.useState(0)
@@ -77,7 +77,7 @@ const Author = (props) => {
               (window.location.href = 'https://www.wsw2000.top:3000/#/login')
             }
             size={90}
-            src='https://img2.baidu.com/it/u=2741677387,189060337&fm=26&fmt=auto&gp=0.jpg'
+            src='https://wsw2000.top/images/avatar.png'
           />
         </div>
         <div className='author-introduction'>

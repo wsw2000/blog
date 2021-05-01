@@ -1,7 +1,7 @@
 import axios from 'axios'
 import QS from 'qs';
-axios.defaults.baseURL = 'http://localhost:7001/'
-// axios.defaults.baseURL = 'http://www.wsw2000.top:7001/'
+// axios.defaults.baseURL = 'http://localhost:7001/'
+axios.defaults.baseURL = 'https://wsw2000.top:7001/'
 
 //http request 拦截器
 axios.interceptors.request.use(
