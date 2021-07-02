@@ -25,6 +25,7 @@ import { connect } from 'react-redux'
 import LazyLoad from 'react-lazyload'
 import useFetchState from '../utils/useFetchState'
 const myList = ({ articleList, typeId, defaultState }) => {
+
   const [list, setList] = useFetchState(articleList.data)
   const [btnLoading, setBtnLoading] = useFetchState(false)
   const [isEnd, setIsEnd] = useFetchState(articleList.end)

@@ -128,7 +128,15 @@ class HomeController extends Controller {
     const data = await this.ctx.service.home.getListByType(id)
     this.ctx.body = { data }
   }
-
+   // 网易云歌单
+  async getMusicList() {
+    let id = this.ctx.query.id
+    const result = await this.service.wangyiyun.getMusicList(id);
+    this.ctx.body = {
+      code: 200,
+      data: result
+    }
+  }
   // 获取天气
   async getWeather() {
     const params = {

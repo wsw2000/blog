@@ -12,7 +12,6 @@ import Sentence from '../sentence'
 import { loadScript } from '../../utils'
 import WeatherContent from '../WeatherContent'
 const Header = (props) => {
-  const [listType, setlistType] = useState([])
   const [menuFlag, setMenuFlag] = useState(false)
   // 暗黑主题类型
   const [theme, setTheme] = useState(0)
@@ -20,25 +19,6 @@ const Header = (props) => {
   const [ipLong, setIpLong] = useState(null)
   const [ipWeather, setIpWeather] = useState(null)
   const [weatherInfo, setWeatherInfo] = useState(null)
-  useEffect(async () => {
-    const { data: res } = await api.getActicleType()
-    if (res.code == 1) {
-      setlistType(res.typedatas)
-      props.changeVisible({ flag: false, listType: res.typedatas || [] })
-      localStorage.setItem('listType', JSON.stringify(res.typedatas || []))
-    } else {
-      let listType = JSON.parse(localStorage.getItem('listType')) || []
-      setlistType(listType)
-      props.changeVisible({ flag: false, listType: listType || [] })
-      localStorage.setItem('listType', JSON.stringify(listType || []))
-    }
-    return () => {
-      setlistType([])
-    }
-  }, [])
-  useEffect(() => {
-    props.changeVisible({ flag: false, listType: listType || [] })
-  }, [listType])
   //跳转到列表页
   const handleClick = (e) => {
     if (e.key == 0) {
@@ -55,10 +35,10 @@ const Header = (props) => {
     setMenuFlag((menuFlag) => {
       return !menuFlag
     })
-    props.changeVisible({ flag: true, listType })
+    props.changeVisible({ flag: true })
   }
   const hideVisible = () => {
-    props.changeVisible({ flag: false, listType })
+    props.changeVisible({ flag: false })
   }
 
   const getIpWeatherInfo = () => {
@@ -136,7 +116,7 @@ const Header = (props) => {
           if (localStorage.getItem('themeType')) {
             setTheme(localStorage.getItem('themeType') * 1)
           } else {
-            setTheme(3) //默认暗黑
+            setTheme(2) //默认暗黑
           }
         }
       )
@@ -250,7 +230,7 @@ const Header = (props) => {
                 <Icon type='home' />
                 首页
               </Menu.Item>
-              {listType.map((item) => {
+              {props.defaultState.listType.map((item) => {
                 return (
                   <Menu.Item key={item.id}>
                     <Icon type={item.icon} />

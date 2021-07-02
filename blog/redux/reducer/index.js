@@ -2,7 +2,12 @@ let defaultState = {
   themeType: 0,
   isFixed: false,
   visible: false,
-  listType: [],
+  listType:  [
+    {id: 1, typeName: "技术", icon: "carry-out"},
+    {id: 2, typeName: "生活", icon: "customer-service"},
+    {id: 3, typeName: "吐槽", icon: "aliwangwang"},
+    {id: 4, typeName: "留言墙", icon: "snippets"},
+  ],
 }
 
 export default function countReducer(preState = defaultState, action) {
@@ -15,7 +20,7 @@ export default function countReducer(preState = defaultState, action) {
     case 'changeFixed':
       return { ...preState, isFixed: data }
     case 'changeVisible':
-      return { ...preState, visible: data.flag, listType: data.listType }
+      return { ...preState, visible: data.flag }
     default:
       return preState
   }

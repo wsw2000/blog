@@ -19,7 +19,7 @@ const Author = (props) => {
   }
   //跳转到列表页
   const handleClick = (e) => {
-    props.changeVisible({ flag: false, listType: [] })
+    props.changeVisible({ flag: false })
     if (e.key == 0) {
       Router.push('/index')
       return
@@ -74,7 +74,7 @@ const Author = (props) => {
         <div style={{ cursor: 'pointer' }}>
           <Avatar
             onClick={() =>
-              (window.location.href = 'https://www.wsw2000.top:3000/#/login')
+              (window.location.href = 'https://wsw2000.top:3000/#/login')
             }
             size={90}
             src='https://wsw2000.top/images/avatar.png'

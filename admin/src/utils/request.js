@@ -1,166 +1,172 @@
-
-
-import axios from 'axios';
+import axios from 'axios'
 
 axios.defaults.baseURL = 'http://localhost:7001/admin'
 // axios.defaults.baseURL = 'https://wsw2000.top:7001/admin'
 
-
-axios.defaults.withCredentials=true
-
+axios.defaults.withCredentials = true
 
 //http request 拦截器
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
-    config.data = JSON.stringify(config.data);
+    config.data = JSON.stringify(config.data)
     config.headers = {
-      'Content-Type':'application/json;charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8',
     }
-    return config;
+    return config
   },
-  error => {
-    return Promise.reject(error);
+  (error) => {
+    return Promise.reject(error)
   }
-);
+)
 
 //http response 拦截器
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     // console.log(response.data.data);
     // if(response.data.data === '登录失败'){
     //   window.location = '/login'
     // }
-    return response;
+    return response
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 const apis = {
-  baseURL : 'http://localhost:7001/admin',
-  // baseURL : 'https://wsw2000.top:7001/admin',
+  baseURL: 'http://localhost:7001/admin',
+  // baseURL: 'https://wsw2000.top:7001/admin',
 
-  loginAdmin(data){
-    return new Promise((resolve,reject) =>{
+  loginAdmin(data) {
+    return new Promise((resolve, reject) => {
       axios({
-        method:'post',
-        url:'/checkLogin',
+        method: 'post',
+        url: '/checkLogin',
         data,
-        withCredentials: true
-      }).then(res =>{
+        withCredentials: true,
+      }).then((res) => {
         resolve(res)
       })
     })
   },
-  LoginOut(){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/LoginOut`,withCredentials:true}).then(res =>{
+  LoginOut() {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/LoginOut`, withCredentials: true }).then((res) => {
         resolve(res)
       })
     })
   },
-  getTypeInfo(){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/getTypeInfo`,withCredentials:true}).then(res =>{
+  getTypeInfo() {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/getTypeInfo`, withCredentials: true }).then((res) => {
         resolve(res)
       })
     })
   },
-  getListByType(id){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/getListByType/${id}`}).then(res =>{
+  getListByType(id) {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/getListByType/${id}` }).then((res) => {
         resolve(res)
       })
     })
   },
-  addArticle(data){
-    return new Promise((resolve,reject) =>{
+  addArticle(data) {
+    return new Promise((resolve, reject) => {
       axios({
-        method:'post',
-        url:'/addArticle',
+        method: 'post',
+        url: '/addArticle',
         // header:{ 'Access-Control-Allow-Origin':'*' },
         data,
-        withCredentials: true
-      }).then(res =>{
+        withCredentials: true,
+      }).then((res) => {
         resolve(res)
       })
     })
   },
-  addAcricleType(data){
-    console.log(data);
-    return new Promise((resolve,reject) =>{
+  addAcricleType(data) {
+    console.log(data)
+    return new Promise((resolve, reject) => {
       axios({
-        method:'post',
-        url:'/addAcricleType',
+        method: 'post',
+        url: '/addAcricleType',
         data,
-        withCredentials: true
-      }).then(res =>{
+        withCredentials: true,
+      }).then((res) => {
         resolve(res)
       })
     })
   },
-  updateArticleType(data){
-    return new Promise((resolve,reject) =>{
+  updateArticleType(data) {
+    return new Promise((resolve, reject) => {
       axios({
-        method:'post',
-        url:'/updateArticleType',
+        method: 'post',
+        url: '/updateArticleType',
         data,
-        withCredentials: true
-      }).then(res =>{
+        withCredentials: true,
+      }).then((res) => {
         resolve(res)
       })
     })
   },
-  updateArticle(data){
-    return new Promise((resolve,reject) =>{
+  updateArticle(data) {
+    return new Promise((resolve, reject) => {
       axios({
-        method:'post',
-        url:'/updateArticle',
-        header:{ 'Access-Control-Allow-Origin':'*' },
+        method: 'post',
+        url: '/updateArticle',
+        header: { 'Access-Control-Allow-Origin': '*' },
         data,
-        withCredentials: true
-      }).then(res =>{
+        withCredentials: true,
+      }).then((res) => {
         resolve(res)
       })
     })
   },
-  getArticlePie(){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/getArticlePie`,withCredentials:true}).then(res =>{
+  getArticlePie() {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/getArticlePie`, withCredentials: true }).then((res) => {
         resolve(res)
       })
     })
   },
-  getArticleList(){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/getArticleList`,withCredentials:true}).then(res =>{
+  getArticleList(data) {
+    return new Promise((resolve, reject) => {
+      axios({
+        method: 'post',
+        url: `/getArticleList`,
+        header: { 'Access-Control-Allow-Origin': '*' },
+        withCredentials: true,
+        data,
+      }).then((res) => {
         resolve(res)
       })
     })
   },
-  delArticleType(id){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/delArticleType/${id}`,withCredentials:true}).then(res =>{
+  delArticleType(id) {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/delArticleType/${id}`, withCredentials: true }).then(
+        (res) => {
+          resolve(res)
+        }
+      )
+    })
+  },
+  delArticle(id) {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/delArticle/${id}`, withCredentials: true }).then((res) => {
         resolve(res)
       })
     })
   },
-  delArticle(id){
-    return new Promise((resolve,reject) =>{
-      axios({url:`/delArticle/${id}`,withCredentials:true}).then(res =>{
-        resolve(res)
-      })
+  getArticleById(id) {
+    return new Promise((resolve, reject) => {
+      axios({ url: `/getArticleById/${id}`, withCredentials: true }).then(
+        (res) => {
+          resolve(res)
+        }
+      )
     })
   },
-  getArticleById(id) { 
-    return new Promise((resolve,reject) =>{
-      axios({url:`/getArticleById/${id}`,withCredentials:true}).then(res =>{
-        resolve(res)
-      })
-    })
-  }
 }
 
 export default apis

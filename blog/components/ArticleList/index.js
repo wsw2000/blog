@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect,useState} from 'react';
 import Link from 'next/link'
 import Router from 'next/router';
 import { List,Icon,Tag,Spin,Button,Divider,Radio } from 'antd';
@@ -8,7 +8,7 @@ import {timefilter} from '../../utils';
 import apis from '../../utils/request';
 import useFetchState from '../../utils/useFetchState';
 const ArticleList = (props) => {
-  const [mylist,setMylist] = useFetchState([])
+  const [mylist,setMylist] = useState(props.mylist)
   const [btnLoading,setBtnLoading] = useFetchState(false)
   const [isEnd,setIsEnd] = useFetchState(false)
   const [listLoading,setListLoading] = useFetchState(false)
@@ -18,17 +18,22 @@ const ArticleList = (props) => {
   const [orderType,setOrderType] = useFetchState('Time')
   const [order,setOrder] = useFetchState('DESC')
   
-  useEffect(async()=>{
-    const params = {
-      typeId: props.typeId,
-      page:1,
-      limit,
-      orderType,
-      order
-    }
-    const result = await getArticleList(params)
-    setMylist(result)
-  },[])
+  // useEffect(async()=>{
+  //   const params = {
+  //     typeId: props.typeId,
+  //     page:1,
+  //     limit,
+  //     orderType,
+  //     order
+  //   }
+  //   if(props.mylist && props.mylist.length != 0){
+  //     console.warn('==');
+  //   }else{
+  //     console.warn('--');
+  //     const result = await getArticleList(params)
+  //     setMylist(result)
+  //   }
+  // },[])
   const getArticleList = async(params) =>{
     setListLoading(true)
     const { data: res } = await apis.getArticleList(params)
